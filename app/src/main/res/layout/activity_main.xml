@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.sothree.slidinguppanel.SlidingUpPanelLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_panel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:gravity="bottom"
+    android:background="@color/green_back"
+    app:umanoDragView="@id/drawer"
+    app:umanoPanelHeight="125dp"
+    app:umanoOverlay="true"
+    app:umanoShadowHeight="0dp">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <!--말풍선 -->
+        <ImageView
+            android:id="@+id/speechBubble"
+            android:layout_width="352dp"
+            android:layout_height="177dp"
+            android:layout_marginTop="250dp"
+            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/rectangle">
+
+        </ImageView>
+
+        <!--식물 그림-->
+        <ImageView
+            android:id="@+id/plantPot"
+            android:layout_width="132dp"
+            android:layout_height="158dp"
+            android:layout_marginTop="60dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/plantpot" />
+
+        <!--말풍선 안에 들어가는 텍스트-->
+        <TextView
+            android:id="@+id/plant_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="316dp"
+            android:text="null"
+
+            android:textColor="@color/white"
+            android:textSize="25dp"
+            android:textStyle="bold"
+
+            app:layout_constraintHorizontal_bias="0.514"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </TextView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!--슬라이드 레이아웃 -->
+    <LinearLayout
+        android:background="@color/colorTransparent"
+        android:id="@+id/drawer"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:orientation="vertical">
+
+        <!-- 슬라이드 올리는 막대기-->
+        <View
+            android:id="@+id/swipe"
+            android:background="@drawable/swipe_tip_background"
+            android:layout_width="60dp"
+            android:layout_height="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="center_horizontal"/>
+
+        <!--슬라이드 레이아웃 -->
+        <RelativeLayout
+            android:background="@drawable/drawer_background"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:id="@+id/slide_layout"
+            >
+
+            <!--상태 표시 레이아웃 -->
+            <LinearLayout
+                android:background="@drawable/state_layout"
+                android:id="@+id/state_layout"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical|center_horizontal"
+                >
+
+                <!--토양습도 아이콘 -->
+                <ImageView
+                    android:id="@+id/soilHumanity"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/humanity_icon"
+                    android:layout_margin="7dp"
+                    android:padding="10dp"
+                    >
+
+                </ImageView>
+                <!-- 토양습도 데이터 텍스트 -->
+                <TextView
+                    android:id="@+id/soil_humanity_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="null"
+                    android:layout_marginRight="7dp"
+                    android:textStyle="bold"
+                    android:textSize="27dp"
+                    >
+
+                </TextView>
+
+                <!--습도 아이콘 -->
+                <ImageView
+                    android:id="@+id/Humanity"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/humanity_icon"
+                    android:layout_margin="7dp"
+
+                    android:padding="10dp"
+                    >
+
+                </ImageView>
+
+                <!--습도 데이터 텍스트-->
+                <TextView
+                    android:id="@+id/humanity_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="null"
+                    android:layout_marginRight="7dp"
+                    android:textStyle="bold"
+                    android:textSize="27dp"
+                    >
+
+                </TextView>
+
+                <!--온도 아이콘 -->
+                <ImageView
+                    android:id="@+id/Temperature"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/temperature_icon"
+                    android:layout_margin="7dp"
+                    >
+
+                </ImageView>
+
+                <!--온도 데이터 텍스트 -->
+                <TextView
+                    android:id="@+id/temperature_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="null"
+                    android:layout_marginRight="7dp"
+                    android:textStyle="bold"
+                    android:textSize="27dp"
+                    >
+
+                </TextView>
+            </LinearLayout>
+
+            <!-- 상태 표시 텍스트 -->
+            <LinearLayout
+                android:id="@+id/state_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@id/state_layout"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="토양 습도"
+                    android:textColor="@color/grey_500"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="55dp"
+                    >
+
+                </TextView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="습도"
+                    android:textColor="@color/grey_500"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="80dp"
+                    >
+
+                </TextView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="온도"
+                    android:textColor="@color/grey_500"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="100dp"
+                    >
+
+                </TextView>
+            </LinearLayout>
+
+            <!--자동 ON/OFF 텍스트 뷰-->
+            <TextView
+                android:id="@+id/auto_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/state_text"
+                android:text="자동 ON/OFF"
+                android:textSize="40dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:paddingLeft="25dp"
+                android:paddingTop="15dp"
+
+                >
+
+            </TextView>
+
+            <!--자동 물주기 레이아웃 -->
+            <LinearLayout
+                android:id="@+id/water_auto_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_vertical|center_horizontal"
+                android:layout_below="@id/auto_text"
+                android:layout_marginTop="25dp"
+                android:layout_marginLeft="50dp"
+                >
+
+                <!--자동 물주기 버튼-->
+                <ToggleButton
+                    android:id="@+id/water_auto_btn"
+                    android:layout_width="60dp"
+                    android:layout_height="50dp"
+                    android:enabled="true"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/btn_water_auto"
+
+                    >
+                </ToggleButton>
+
+                <!--자동 물주기 ON/OFF 텍스트-->
+                <TextView
+                    android:id="@+id/water_auto_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="물 OFF"
+                    android:textColor="@color/black"
+                    android:textSize="20dp"
+                    android:layout_marginTop="20px"
+
+                    >
+
+                </TextView>
+            </LinearLayout>
+
+            <!--자동 조명 레이아웃 -->
+            <LinearLayout
+                android:id="@+id/light_auto_layout"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_vertical|center_horizontal"
+                android:layout_below="@id/auto_text"
+                android:layout_toRightOf="@id/water_auto_layout"
+                android:layout_marginTop="25dp"
+                android:layout_marginLeft="60dp"
+                >
+
+                <!--자동 조명 버튼-->
+                <ToggleButton
+                    android:id="@+id/light_auto_btn"
+                    android:layout_width="60dp"
+                    android:layout_height="50dp"
+                    android:enabled="true"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/btn_light_auto"
+
+                    >
+                </ToggleButton>
+
+                <!--자동 조명 ON/OFF 텍스트-->
+                <TextView
+                    android:id="@+id/light_auto_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="조명 OFF"
+                    android:textColor="@color/black"
+                    android:textSize="18dp"
+                    android:layout_marginTop="20px"
+
+                    >
+
+                </TextView>
+            </LinearLayout>
+
+            <!--자동 바람 레이아웃 -->
+            <LinearLayout
+                android:id="@+id/wind_auto_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_vertical|center_horizontal"
+                android:layout_below="@id/auto_text"
+                android:layout_toRightOf="@id/light_auto_layout"
+                android:layout_marginTop="25dp"
+                android:layout_marginLeft="50dp"
+                >
+                <!--자동 바람 버튼-->
+                <ToggleButton
+                    android:id="@+id/wind_auto_btn"
+                    android:layout_width="60dp"
+                    android:layout_height="50dp"
+                    android:enabled="true"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/btn_wind_auto"
+
+                    >
+                </ToggleButton>
+
+                <!--자동 바람 ON/OFF 텍스트-->
+                <TextView
+                    android:id="@+id/wind_auto_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="바람 OFF"
+                    android:textColor="@color/black"
+                    android:textSize="20dp"
+                    android:layout_marginTop="20px"
+
+                    >
+
+                </TextView>
+            </LinearLayout>
+
+            <!-- 수동 조작 텍스트 뷰-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/water_auto_layout"
+                android:id="@+id/hand_text"
+                android:text="수동 조작"
+                android:textSize="40dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:paddingTop="25dp"
+                android:paddingLeft="25dp"
+
+                >
+            </TextView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical|center_horizontal"
+                android:layout_below="@id/hand_text"
+
+                >
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/hand_water_btn"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/btn_hand"
+                    android:text="물 주기"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_margin="10dp"
+                    >
+
+                </androidx.appcompat.widget.AppCompatButton>
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/hand_light_btn"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/btn_hand"
+                    android:text="조명 켜기"
+                    android:textSize="17dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_margin="10dp"
+
+                    >
+
+                </androidx.appcompat.widget.AppCompatButton>
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/hand_wind_btn"
+                    android:layout_width="110dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/btn_hand"
+                    android:text="공기 순환 실행"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_margin="7dp"
+
+                    >
+
+                </androidx.appcompat.widget.AppCompatButton>
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+
+
+
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>
