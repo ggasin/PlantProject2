@@ -18,20 +18,21 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -39,12 +40,12 @@ import java.util.regex.Pattern;
 public class RegisterActivity extends AppCompatActivity {
     private IntentIntegrator qrScan;
     private TextView qrResultText,canUseIdText,checkPwdText, goLoginTextbtn,checkOverSixPwdText,canUseNameText, canUseTelText;
-    private Button qrScanBtn,registerBtn;
+    private Button qrScanBtn,registerBtn, idOverLapBtn;
     private FirebaseAuth mFirebaseAuth;
     private DatabaseReference mDatabaseRef;
     private EditText editEmailId,regEditPwd,editName,editTel,checkEditPwd;
     boolean isNameOK,isTelOK,isEmailIdOK,isPwdOK,isPwdCheckOK,isQrOK = false;
-
+    int overLapCnt, childNum =0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +63,7 @@ public class RegisterActivity extends AppCompatActivity {
         canUseNameText = findViewById(R.id.canUseNameText);
         canUseTelText = findViewById(R.id.canUseTelText);
         checkOverSixPwdText = findViewById(R.id.check_over_six_pwd);
+        idOverLapBtn = findViewById(R.id.idOverlap_btn);
 
         //qr스캔 관련 변수
         qrScanBtn = (Button)findViewById(R.id.qrScan_btn);
@@ -76,6 +78,7 @@ public class RegisterActivity extends AppCompatActivity {
         Pattern pattern = Patterns.EMAIL_ADDRESS;
 
 
+        //qr스캔 버튼 클릭 이벤트
         qrScanBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,6 +86,7 @@ public class RegisterActivity extends AppCompatActivity {
                 qrScan.initiateScan();
             }
         });
+
         //이름 editText 변경 이벤트
         editName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -146,8 +150,6 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
 
-
-
         //아이디 editText 변경 이벤트
         editEmailId.addTextChangedListener(new TextWatcher() {
             @Override
@@ -156,17 +158,14 @@ public class RegisterActivity extends AppCompatActivity {
             }
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                canUseIdText.setVisibility(View.VISIBLE);
-                if(editEmailId.getText().toString().equals("tmdals028@naver.com")||
-                        !pattern.matcher(editEmailId.getText().toString()).matches()){
-                    canUseIdText.setText("사용 불가한 아이디입니다.");
+                if(!pattern.matcher(editEmailId.getText().toString()).matches()){
+                    canUseIdText.setVisibility(View.VISIBLE);
+                    canUseIdText.setText("이메일 형식을 확인해주세요.");
                     canUseIdText.setTextColor(Color.parseColor("#FF0000")); //빨간색
-                    isEmailIdOK = false;
+                    idOverLapBtn.setClickable(false);
                 }
                 else{
-                    canUseIdText.setText("사용 가능한 아이디입니다.");
-                    canUseIdText.setTextColor(Color.parseColor("#08A600")); //초록색
-                    isEmailIdOK = true;
+                    idOverLapBtn.setClickable(true);
                 }
             }
             @Override
@@ -189,12 +188,11 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 checkOverSixPwdText.setVisibility(View.VISIBLE);
-                if(regEditPwd.getText().length()<6){
+                if (regEditPwd.getText().length() < 6) {
                     checkOverSixPwdText.setText("비밀번호는 6자리 이상이어야 합니다.");
                     checkOverSixPwdText.setTextColor(Color.parseColor("#FF0000"));
                     isPwdOK = false;
-                }
-                else{
+                } else {
                     checkOverSixPwdText.setText("올바른 비밀번호 형식입니다.");
                     checkOverSixPwdText.setTextColor(Color.parseColor("#08A600"));
                     isPwdOK = true;
@@ -203,7 +201,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (regEditPwd.getText().toString().equals("")){
+                if (regEditPwd.getText().toString().equals("")) {
                     checkOverSixPwdText.setVisibility(View.GONE);
                     isPwdOK = false;
                 }
@@ -244,6 +242,8 @@ public class RegisterActivity extends AppCompatActivity {
 
 
 
+
+
         //회원가입 버튼 클릭 후 가입 진행 이벤트
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -262,27 +262,33 @@ public class RegisterActivity extends AppCompatActivity {
                             if(task.isSuccessful()){
                                 FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
                                 UserAccount account = new UserAccount();
+
                                 HashMap<Object,Integer> sensors_child = new HashMap<>();
                                 sensors_child.put("Hum",0);
                                 sensors_child.put("Temp",0);
                                 sensors_child.put("soil_hum",0);
+
                                 HashMap<Object,String>  auto_nonauto_child= new HashMap<>();
                                 auto_nonauto_child.put("LED","OFF");
                                 auto_nonauto_child.put("cooler","OFF");
                                 auto_nonauto_child.put("water","OFF");
+
                                 account.setEmailId(firebaseUser.getEmail()); // 로그인을 하는 정확한 이메일이 필요하기 때문에 firebaseUser에서 정보를 가져옴
                                 account.setPwd(strPwd);
                                 account.setName(strName);
                                 account.setTel(strTel);
                                 account.setQr(strQr);
+
+                                HashMap<Object,String> qr = new HashMap<>();
+                                qr.put(strQr,strQr);
                                 mDatabaseRef.child(account.getQr()).child("UserAccount").setValue(account);
                                 mDatabaseRef.child(account.getQr()).child("operation").child("sensors").setValue(sensors_child);
                                 mDatabaseRef.child(account.getQr()).child("operation").child("button").child("auto").setValue(auto_nonauto_child);
                                 mDatabaseRef.child(account.getQr()).child("operation").child("button").child("nonauto").setValue(auto_nonauto_child);
+                                mDatabaseRef.child("Qr").child(strQr).setValue(strQr);
                                 Toast.makeText(getApplicationContext(),"가입성공",Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(RegisterActivity.this , LoginActivity.class);
                                 startActivity(intent);
-
                             }
                             else{
                                 Toast.makeText(getApplicationContext(),"가입이 왜 안될까",Toast.LENGTH_SHORT).show();
@@ -297,6 +303,65 @@ public class RegisterActivity extends AppCompatActivity {
 
             }
         });
+
+        //plant 자식 수만큼 childNum을 플러스. 자식수를 알기 위한 이벤트
+        mDatabaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot sh : snapshot.getChildren()){
+                    childNum++;
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+        //중복버튼 클릭 이벤트
+        idOverLapBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                overLapCnt =0;
+                mDatabaseRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for(DataSnapshot sh : snapshot.getChildren()){
+                            mDatabaseRef.child(sh.getKey()).child("UserAccount").child("emailId").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        if (task.getResult().getValue().toString().equals(editEmailId.getText().toString())) {
+                                            Toast.makeText(getApplicationContext(), "중복된 아이디입니다.", Toast.LENGTH_SHORT).show();
+                                            canUseIdText.setVisibility(View.VISIBLE);
+                                            canUseIdText.setText("사용 불가한 아이디입니다.");
+                                            canUseIdText.setTextColor(Color.parseColor("#FF0000")); //빨간색
+                                            isEmailIdOK = false;
+                                            overLapCnt--; //중복이 되면 이 값을 마이너스 함
+                                            Log.d("중복된 값",task.getResult().getValue().toString());
+                                        }
+                                        else{
+                                            overLapCnt++;
+                                            Log.d("중복 아닐때 overLapCnt 값",String.valueOf(overLapCnt));
+                                            Log.d("중복 아닐때 childNum 값",String.valueOf(childNum));
+                                            if(overLapCnt == childNum){ //child를 훑었을 때 중복이 없었다면 overLapCnt와 자식들 수는 똑같을거고 아니라면 중복이 있었다는 뜻
+                                                Toast.makeText(getApplicationContext(), "사용가능한 아이디입니다.", Toast.LENGTH_SHORT).show();
+                                                canUseIdText.setVisibility(View.VISIBLE);
+                                                canUseIdText.setText("사용 가능한 아이디입니다.");
+                                                canUseIdText.setTextColor(Color.parseColor("#08A600")); //초록색
+                                                isEmailIdOK = true;
+                                            }
+
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
+        }});
 
         //로그인 화면으로 돌아가기
         goLoginTextbtn.setOnClickListener(new View.OnClickListener() {

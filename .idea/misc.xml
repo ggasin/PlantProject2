@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudio/PlantProject/app/src/main/res/layout/activity_register.xml" value="0.2" />
         <entry key="..\:/AndroidStudio/app/src/main/java/com/PlantProject/app/src/main/res/drawable-v24/button_stamp_background.xml" value="0.1" />
         <entry key="..\:/AndroidStudio/app/src/main/java/com/PlantProject/app/src/main/res/drawable-v24/drawer_background.xml" value="0.1" />
         <entry key="..\:/AndroidStudio/app/src/main/java/com/PlantProject/app/src/main/res/drawable-v24/edittext_background.xml" value="0.1" />
