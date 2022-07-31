@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/register_text"
+        android:id="@+id/login_text"
         android:layout_marginBottom="20dp"
         android:text="로그인"
         android:textSize="50dp"
@@ -70,10 +70,10 @@
             android:backgroundTint="@color/on_green"
             android:text="로그인"
             android:textColor="@color/white"
-            app:layout_constraintTop_toBottomOf="@+id/login_edit_pwd" />
+             />
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_pwd"
+            android:id="@+id/login_edit_pwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword" />

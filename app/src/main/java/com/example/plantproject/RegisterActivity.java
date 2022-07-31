@@ -165,6 +165,7 @@ public class RegisterActivity extends AppCompatActivity {
                     idOverLapBtn.setClickable(false);
                 }
                 else{
+                    canUseIdText.setVisibility(View.GONE);
                     idOverLapBtn.setClickable(true);
                 }
             }
@@ -253,54 +254,56 @@ public class RegisterActivity extends AppCompatActivity {
                 String strTel = editTel.getText().toString();
                 String strPwd = regEditPwd.getText().toString();
                 String strQr = qrResultText.getText().toString();
-
-                mFirebaseAuth.createUserWithEmailAndPassword(strEmailId,strPwd).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-
-                        if(isEmailIdOK && isNameOK && isTelOK && isPwdOK && isPwdCheckOK && isQrOK){
-                            if(task.isSuccessful()){
+                Log.d("이메일OK", String.valueOf(isEmailIdOK));
+                Log.d("이름OK", String.valueOf(isNameOK));
+                Log.d("번호OK", String.valueOf(isTelOK));
+                Log.d("비밀OK", String.valueOf(isPwdOK));
+                Log.d("비밀확인OK", String.valueOf(isPwdCheckOK));
+                Log.d("큐알OK", String.valueOf(isQrOK));
+                if (isEmailIdOK & isNameOK & isTelOK & isPwdOK & isPwdCheckOK & isQrOK) {
+                    mFirebaseAuth.createUserWithEmailAndPassword(strEmailId, strPwd).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                //회원가입 성공
                                 FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
+
                                 UserAccount account = new UserAccount();
 
-                                HashMap<Object,Integer> sensors_child = new HashMap<>();
-                                sensors_child.put("Hum",0);
-                                sensors_child.put("Temp",0);
-                                sensors_child.put("soil_hum",0);
+                                HashMap<Object, Integer> sensors_child = new HashMap<>();
+                                sensors_child.put("Hum", 0);
+                                sensors_child.put("Temp", 0);
+                                sensors_child.put("soil_hum", 0);
 
-                                HashMap<Object,String>  auto_nonauto_child= new HashMap<>();
-                                auto_nonauto_child.put("LED","OFF");
-                                auto_nonauto_child.put("cooler","OFF");
-                                auto_nonauto_child.put("water","OFF");
+                                HashMap<Object, String> auto_nonauto_child = new HashMap<>();
+                                auto_nonauto_child.put("LED", "OFF");
+                                auto_nonauto_child.put("cooler", "OFF");
+                                auto_nonauto_child.put("water", "OFF");
 
                                 account.setEmailId(firebaseUser.getEmail()); // 로그인을 하는 정확한 이메일이 필요하기 때문에 firebaseUser에서 정보를 가져옴
                                 account.setPwd(strPwd);
                                 account.setName(strName);
                                 account.setTel(strTel);
                                 account.setQr(strQr);
-
-                                HashMap<Object,String> qr = new HashMap<>();
-                                qr.put(strQr,strQr);
                                 mDatabaseRef.child(account.getQr()).child("UserAccount").setValue(account);
                                 mDatabaseRef.child(account.getQr()).child("operation").child("sensors").setValue(sensors_child);
                                 mDatabaseRef.child(account.getQr()).child("operation").child("button").child("auto").setValue(auto_nonauto_child);
                                 mDatabaseRef.child(account.getQr()).child("operation").child("button").child("nonauto").setValue(auto_nonauto_child);
-                                mDatabaseRef.child("Qr").child(strQr).setValue(strQr);
-                                Toast.makeText(getApplicationContext(),"가입성공",Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(RegisterActivity.this , LoginActivity.class);
+                                Toast.makeText(getApplicationContext(), "가입성공", Toast.LENGTH_SHORT).show();
+
+                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                 startActivity(intent);
-                            }
-                            else{
-                                Toast.makeText(getApplicationContext(),"가입이 왜 안될까",Toast.LENGTH_SHORT).show();
+                                finish(); //현재 엑티비티 파괴
+                            } else {
+                                //회원가입 실패
+                                Toast.makeText(getApplicationContext(), "회원가입 실패", Toast.LENGTH_SHORT).show();
                             }
                         }
-                        else{
-                            Toast.makeText(getApplicationContext(),"가입실패",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
 
-
+                    });
+                } else {
+                    Toast.makeText(getApplicationContext(), "정보를 모두 기입했는지, qr스캔,아이디 중복확인을 했는지 확인해주세요.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
