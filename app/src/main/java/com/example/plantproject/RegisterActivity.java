@@ -32,7 +32,6 @@ import com.google.zxing.integration.android.IntentResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -46,6 +45,20 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText editEmailId,regEditPwd,editName,editTel,checkEditPwd;
     boolean isNameOK,isTelOK,isEmailIdOK,isPwdOK,isPwdCheckOK,isQrOK = false;
     int overLapCnt, childNum =0;
+    //db이름 enum으로 저장. 나중에 변경 용이하도록
+    public enum DbName {
+        BUTTON("button"), OPERATION("operation"), USERACCOUNT("UserAccount"),
+        EMAILID("emailId"),NAME("name"),TEL("tel"),PWD("pwd"),
+        QR("qr"),AUTO("auto"),NONAUTO("nonauto"),LED("LED"),WATER("water"), COOLER("cooler"),
+        SENSORS("sensors"),HUM("Hum"),TEMP("Temp"),SOILHUM("soil_hum");
+        private final String label;
+        DbName(String label){
+            this.label = label;
+        }
+        public String label() {
+            return label;
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,20 +67,20 @@ public class RegisterActivity extends AppCompatActivity {
         editName = findViewById(R.id.edit_name);
         editTel = findViewById(R.id.edit_tel);
         editEmailId = findViewById(R.id.reg_edit_emailId);
-        canUseIdText = findViewById(R.id.canUseIdText);
+        canUseIdText = findViewById(R.id.canUseId_text);
         regEditPwd = findViewById(R.id.reg_edit_pwd);
         checkEditPwd = findViewById(R.id.edit_CheckPwd);
-        checkPwdText = findViewById(R.id.checkPwdText);
-        goLoginTextbtn = findViewById(R.id.goLoginText_btn);
+        checkPwdText = findViewById(R.id.checkPwd_text);
+        goLoginTextbtn = findViewById(R.id.go_login_text_btn);
         registerBtn = findViewById(R.id.register_btn);
-        canUseNameText = findViewById(R.id.canUseNameText);
-        canUseTelText = findViewById(R.id.canUseTelText);
-        checkOverSixPwdText = findViewById(R.id.check_over_six_pwd);
+        canUseNameText = findViewById(R.id.canUseName_text);
+        canUseTelText = findViewById(R.id.canUseTel_text);
+        checkOverSixPwdText = findViewById(R.id.checkOverSixPwd_text);
         idOverLapBtn = findViewById(R.id.idOverlap_btn);
 
         //qr스캔 관련 변수
         qrScanBtn = (Button)findViewById(R.id.qrScan_btn);
-        qrResultText = (TextView) findViewById(R.id.qrCodeResult);
+        qrResultText = (TextView) findViewById(R.id.qrResult_text);
         qrScan = new IntentIntegrator(this);
 
         //파이어베이스 관련 변수
@@ -271,24 +284,24 @@ public class RegisterActivity extends AppCompatActivity {
                                 UserAccount account = new UserAccount();
 
                                 HashMap<Object, Integer> sensors_child = new HashMap<>();
-                                sensors_child.put("Hum", 0);
-                                sensors_child.put("Temp", 0);
-                                sensors_child.put("soil_hum", 0);
+                                sensors_child.put(DbName.HUM.label(), 0);
+                                sensors_child.put(DbName.TEMP.label(), 0);
+                                sensors_child.put(DbName.SOILHUM.label(), 0);
 
                                 HashMap<Object, String> auto_nonauto_child = new HashMap<>();
-                                auto_nonauto_child.put("LED", "OFF");
-                                auto_nonauto_child.put("cooler", "OFF");
-                                auto_nonauto_child.put("water", "OFF");
+                                auto_nonauto_child.put(DbName.LED.label(), "OFF");
+                                auto_nonauto_child.put(DbName.COOLER.label(), "OFF");
+                                auto_nonauto_child.put(DbName.WATER.label(), "OFF");
 
                                 account.setEmailId(firebaseUser.getEmail()); // 로그인을 하는 정확한 이메일이 필요하기 때문에 firebaseUser에서 정보를 가져옴
                                 account.setPwd(strPwd);
                                 account.setName(strName);
                                 account.setTel(strTel);
                                 account.setQr(strQr);
-                                mDatabaseRef.child(account.getQr()).child("UserAccount").setValue(account);
-                                mDatabaseRef.child(account.getQr()).child("operation").child("sensors").setValue(sensors_child);
-                                mDatabaseRef.child(account.getQr()).child("operation").child("button").child("auto").setValue(auto_nonauto_child);
-                                mDatabaseRef.child(account.getQr()).child("operation").child("button").child("nonauto").setValue(auto_nonauto_child);
+                                mDatabaseRef.child(account.getQr()).child(DbName.USERACCOUNT.label()).setValue(account);
+                                mDatabaseRef.child(account.getQr()).child(DbName.OPERATION.label()).child(DbName.SENSORS.label()).setValue(sensors_child);
+                                mDatabaseRef.child(account.getQr()).child(DbName.OPERATION.label()).child(DbName.BUTTON.label()).child(DbName.AUTO.label()).setValue(auto_nonauto_child);
+                                mDatabaseRef.child(account.getQr()).child(DbName.OPERATION.label()).child(DbName.BUTTON.label()).child(DbName.NONAUTO.label()).setValue(auto_nonauto_child);
                                 Toast.makeText(getApplicationContext(), "가입성공", Toast.LENGTH_SHORT).show();
 
                                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
@@ -325,45 +338,55 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 overLapCnt =0;
-                mDatabaseRef.addValueEventListener(new ValueEventListener() {
+                mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for(DataSnapshot sh : snapshot.getChildren()){
-                            mDatabaseRef.child(sh.getKey()).child("UserAccount").child("emailId").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        if (task.getResult().getValue().toString().equals(editEmailId.getText().toString())) {
-                                            Toast.makeText(getApplicationContext(), "중복된 아이디입니다.", Toast.LENGTH_SHORT).show();
-                                            canUseIdText.setVisibility(View.VISIBLE);
-                                            canUseIdText.setText("사용 불가한 아이디입니다.");
-                                            canUseIdText.setTextColor(Color.parseColor("#FF0000")); //빨간색
-                                            isEmailIdOK = false;
-                                            overLapCnt--; //중복이 되면 이 값을 마이너스 함
-                                            Log.d("중복된 값",task.getResult().getValue().toString());
-                                        }
-                                        else{
-                                            overLapCnt++;
-                                            Log.d("중복 아닐때 overLapCnt 값",String.valueOf(overLapCnt));
-                                            Log.d("중복 아닐때 childNum 값",String.valueOf(childNum));
-                                            if(overLapCnt == childNum){ //child를 훑었을 때 중복이 없었다면 overLapCnt와 자식들 수는 똑같을거고 아니라면 중복이 있었다는 뜻
-                                                Toast.makeText(getApplicationContext(), "사용가능한 아이디입니다.", Toast.LENGTH_SHORT).show();
+                        if(snapshot.exists()){
+                            for(DataSnapshot sh : snapshot.getChildren()){
+                                mDatabaseRef.child(sh.getKey()).child(DbName.USERACCOUNT.label()).child(DbName.EMAILID.label()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            if (task.getResult().getValue().toString().equals(editEmailId.getText().toString())) {
+                                                Toast.makeText(getApplicationContext(), "중복된 아이디입니다.", Toast.LENGTH_SHORT).show();
                                                 canUseIdText.setVisibility(View.VISIBLE);
-                                                canUseIdText.setText("사용 가능한 아이디입니다.");
-                                                canUseIdText.setTextColor(Color.parseColor("#08A600")); //초록색
-                                                isEmailIdOK = true;
+                                                canUseIdText.setText("사용 불가한 아이디입니다.");
+                                                canUseIdText.setTextColor(Color.parseColor("#FF0000")); //빨간색
+                                                isEmailIdOK = false;
+                                                overLapCnt--; //중복이 되면 이 값을 마이너스 함
+                                                Log.d("중복된 값",task.getResult().getValue().toString());
                                             }
+                                            else{
+                                                overLapCnt++;
+                                                Log.d("중복 아닐때 overLapCnt 값",String.valueOf(overLapCnt));
+                                                Log.d("중복 아닐때 childNum 값",String.valueOf(childNum));
+                                                if(overLapCnt == childNum){ //child를 훑었을 때 중복이 없었다면 overLapCnt와 자식들 수는 똑같을거고 아니라면 중복이 있었다는 뜻
+                                                    Toast.makeText(getApplicationContext(), "사용가능한 아이디입니다.", Toast.LENGTH_SHORT).show();
+                                                    canUseIdText.setVisibility(View.VISIBLE);
+                                                    canUseIdText.setText("사용 가능한 아이디입니다.");
+                                                    canUseIdText.setTextColor(Color.parseColor("#08A600")); //초록색
+                                                    isEmailIdOK = true;
+                                                }
 
+                                            }
                                         }
                                     }
-                                }
-                            });
+                                });
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "사용가능한 아이디입니다.", Toast.LENGTH_SHORT).show();
+                            canUseIdText.setVisibility(View.VISIBLE);
+                            canUseIdText.setText("사용 가능한 아이디입니다.");
+                            canUseIdText.setTextColor(Color.parseColor("#08A600")); //초록색
+                            isEmailIdOK = true;
                         }
+
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                     }
                 });
+
         }});
 
         //로그인 화면으로 돌아가기

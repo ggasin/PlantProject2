@@ -2,17 +2,23 @@ package com.example.plantproject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+import android.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -53,6 +59,13 @@ public class MainActivity extends AppCompatActivity {
     private ToggleButton waterToggle,lightToggle,windToggle;
     private TextView waterText,lightText,windText,sh_data_tv,h_data_tv,t_data_tv,plant_text;
     private Button handWaterBtn,handLightBtn,handWindBtn;
+    private ImageButton goMyPageBtn,goSettingBtn,goHelpBtn;
+    //사이드바 레이아웃
+    DrawerLayout drawerLayout;
+    View drawerView;
+
+
+
     //db이름 enum으로 저장. 나중에 변경 용이하도록
     public enum DbName {
         BUTTON("button"), OPERATION("operation"), USERACCOUNT("UserAccount"),
@@ -74,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         //자동 ON/OFF 버튼 및 텍스트 변수
         waterToggle = findViewById(R.id.water_auto_btn);
         lightToggle = findViewById(R.id.light_auto_btn);
@@ -92,15 +106,16 @@ public class MainActivity extends AppCompatActivity {
         handWaterBtn = findViewById(R.id.hand_water_btn);
         handLightBtn = findViewById(R.id.hand_light_btn);
         handWindBtn = findViewById(R.id.hand_wind_btn);
-        Intent intent = getIntent();
+        goMyPageBtn = findViewById(R.id.mypage_btn);
+        goSettingBtn = findViewById(R.id.setting_btn);
+        goHelpBtn = findViewById(R.id.help_btn);
+
         //데이터베이스 변수
         database = FirebaseDatabase.getInstance();
+        Intent intent = getIntent();
+        qr=intent.getStringExtra("qr");
         mDatabaseRef = database.getReference("plant").child(intent.getStringExtra("qr"));
         mFirebaseAuth = FirebaseAuth.getInstance();
-
-        TextView test = findViewById(R.id.login_id_test);
-        TextView test2 = findViewById(R.id.textView2);
-        test.setText(mFirebaseAuth.getCurrentUser().getEmail().toString());
 
 
 
@@ -445,8 +460,18 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+        goMyPageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,MyPageActivity.class);
+                intent.putExtra("qr",qr);
+                startActivity(intent);
+            }
+        });
+
 
     }
+
     //센서값에 따라 말풍선 말 바꾸는 함수
     public void setSpeechBubble(TextView x){
         if(soil_hum>=40 && soil_hum<60){

@@ -13,20 +13,52 @@
     app:umanoPanelHeight="125dp"
     app:umanoOverlay="true"
     app:umanoShadowHeight="0dp">
+
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
+
         <!--말풍선 -->
+
+        <ImageButton
+            android:id="@+id/mypage_btn"
+            android:layout_width="37dp"
+            android:layout_height="37dp"
+            android:background="?attr/actionBarItemBackground"
+            android:contentDescription="마이페이지버튼"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.95"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.02"
+            app:srcCompat="@drawable/mypage_icon" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:text="MY"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/mypage_btn"
+            app:layout_constraintStart_toStartOf="@+id/mypage_btn"
+            app:layout_constraintTop_toBottomOf="@+id/mypage_btn" />
+
+
         <ImageView
             android:id="@+id/speechBubble"
             android:layout_width="352dp"
             android:layout_height="177dp"
-            android:layout_marginTop="250dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.491"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.6"
             app:srcCompat="@drawable/rectangle">
 
         </ImageView>
@@ -34,9 +66,10 @@
         <!--식물 그림-->
         <ImageView
             android:id="@+id/plantPot"
-            android:layout_width="132dp"
-            android:layout_height="158dp"
+            android:layout_width="177dp"
+            android:layout_height="190dp"
             android:layout_marginTop="60dp"
+            app:layout_constraintBottom_toTopOf="@+id/speechBubble"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
@@ -48,38 +81,68 @@
             android:id="@+id/plant_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="316dp"
             android:text="null"
 
             android:textColor="@color/white"
             android:textSize="25dp"
             android:textStyle="bold"
 
+            app:layout_constraintBottom_toBottomOf="@+id/speechBubble"
+            app:layout_constraintEnd_toEndOf="@+id/speechBubble"
             app:layout_constraintHorizontal_bias="0.514"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintStart_toStartOf="@+id/speechBubble"
+            app:layout_constraintTop_toTopOf="@+id/speechBubble">
 
         </TextView>
-
-        <TextView
-            android:id="@+id/login_id_test"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            tools:layout_editor_absoluteX="174dp"
-            tools:layout_editor_absoluteY="457dp" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:text="SETTING"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/setting_btn"
+            app:layout_constraintStart_toStartOf="@+id/setting_btn"
+            app:layout_constraintTop_toBottomOf="@+id/setting_btn" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:text="HELP"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/help_btn"
+            app:layout_constraintStart_toStartOf="@+id/help_btn"
+            app:layout_constraintTop_toBottomOf="@+id/help_btn" />
+
+        <ImageButton
+            android:id="@+id/setting_btn"
+            android:layout_width="37dp"
+            android:layout_height="38dp"
+            android:background="?attr/actionBarItemBackground"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/mypage_btn"
+            app:layout_constraintHorizontal_bias="0.96"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/speechBubble"
-            app:layout_constraintVertical_bias="0.223" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.02"
+            app:srcCompat="@drawable/setting_icon" />
+
+        <ImageButton
+            android:id="@+id/help_btn"
+            android:layout_width="37dp"
+            android:layout_height="37dp"
+            android:background="?attr/actionBarItemBackground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/setting_btn"
+            app:layout_constraintHorizontal_bias="0.942"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.02"
+            app:srcCompat="@drawable/help_icon" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -105,31 +168,28 @@
 
         <!--슬라이드 레이아웃 -->
         <RelativeLayout
-            android:background="@drawable/drawer_background"
+            android:id="@+id/slide_layout"
             android:layout_width="match_parent"
             android:layout_height="500dp"
-            android:id="@+id/slide_layout"
-            >
+            android:background="@drawable/drawer_background">
 
             <!--상태 표시 레이아웃 -->
             <LinearLayout
-                android:background="@drawable/state_layout"
                 android:id="@+id/state_layout"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                android:orientation="horizontal"
+                android:background="@drawable/state_layout"
                 android:gravity="center_vertical|center_horizontal"
-                >
+                android:orientation="horizontal">
 
                 <!--토양습도 아이콘 -->
                 <ImageView
                     android:id="@+id/soilHumanity"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@drawable/humanity_icon"
                     android:layout_margin="7dp"
                     android:padding="10dp"
-                    >
+                    android:src="@drawable/humanity_icon">
 
                 </ImageView>
                 <!-- 토양습도 데이터 텍스트 -->
@@ -137,11 +197,10 @@
                     android:id="@+id/soil_humanity_data"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="null"
                     android:layout_marginRight="7dp"
-                    android:textStyle="bold"
+                    android:text="null"
                     android:textSize="27dp"
-                    >
+                    android:textStyle="bold">
 
                 </TextView>
 
@@ -150,11 +209,10 @@
                     android:id="@+id/Humanity"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@drawable/humanity_icon"
                     android:layout_margin="7dp"
-
                     android:padding="10dp"
-                    >
+
+                    android:src="@drawable/humanity_icon">
 
                 </ImageView>
 
@@ -163,11 +221,10 @@
                     android:id="@+id/humanity_data"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="null"
                     android:layout_marginRight="7dp"
-                    android:textStyle="bold"
+                    android:text="null"
                     android:textSize="27dp"
-                    >
+                    android:textStyle="bold">
 
                 </TextView>
 
@@ -176,9 +233,8 @@
                     android:id="@+id/Temperature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/temperature_icon"
                     android:layout_margin="7dp"
-                    >
+                    android:src="@drawable/temperature_icon">
 
                 </ImageView>
 
@@ -187,11 +243,10 @@
                     android:id="@+id/temperature_data"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="null"
                     android:layout_marginRight="7dp"
-                    android:textStyle="bold"
+                    android:text="null"
                     android:textSize="27dp"
-                    >
+                    android:textStyle="bold">
 
                 </TextView>
             </LinearLayout>
@@ -201,40 +256,39 @@
                 android:id="@+id/state_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_below="@id/state_layout"
-                >
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="55dp"
                     android:text="토양 습도"
                     android:textColor="@color/grey_500"
                     android:textSize="20dp"
-                    android:textStyle="bold"
-                    android:layout_marginLeft="55dp"
-                    >
+                    android:textStyle="bold">
 
                 </TextView>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="80dp"
                     android:text="습도"
                     android:textColor="@color/grey_500"
                     android:textSize="20dp"
-                    android:textStyle="bold"
-                    android:layout_marginLeft="80dp"
-                    >
+                    android:textStyle="bold">
 
                 </TextView>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
                     android:text="온도"
                     android:textColor="@color/grey_500"
                     android:textSize="20dp"
-                    android:textStyle="bold"
-                    android:layout_marginLeft="100dp"
-                    >
+                    android:textStyle="bold">
 
                 </TextView>
             </LinearLayout>
@@ -245,12 +299,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/state_text"
-                android:text="자동 ON/OFF"
-                android:textSize="40dp"
-                android:textColor="@color/black"
-                android:textStyle="bold"
                 android:paddingLeft="25dp"
                 android:paddingTop="15dp"
+                android:text="자동 ON/OFF"
+                android:textColor="@color/black"
+                android:textSize="40dp"
+                android:textStyle="bold"
 
                 >
 
@@ -261,36 +315,34 @@
                 android:id="@+id/water_auto_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_vertical|center_horizontal"
                 android:layout_below="@id/auto_text"
-                android:layout_marginTop="25dp"
                 android:layout_marginLeft="50dp"
-                >
+                android:layout_marginTop="25dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical">
 
                 <!--자동 물주기 버튼-->
                 <ToggleButton
                     android:id="@+id/water_auto_btn"
                     android:layout_width="60dp"
                     android:layout_height="50dp"
-                    android:enabled="true"
-                    android:textOn=""
-                    android:textOff=""
                     android:background="@drawable/btn_water_auto"
+                    android:enabled="true"
+                    android:textOff=""
+                    android:textOn=""
 
-                    >
-                </ToggleButton>
+                    ></ToggleButton>
 
                 <!--자동 물주기 ON/OFF 텍스트-->
                 <TextView
                     android:id="@+id/water_auto_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
+                    android:layout_marginTop="20px"
                     android:text="물 OFF"
                     android:textColor="@color/black"
                     android:textSize="20dp"
-                    android:layout_marginTop="20px"
+                    android:textStyle="bold"
 
                     >
 
@@ -302,37 +354,35 @@
                 android:id="@+id/light_auto_layout"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_vertical|center_horizontal"
                 android:layout_below="@id/auto_text"
-                android:layout_toRightOf="@id/water_auto_layout"
-                android:layout_marginTop="25dp"
                 android:layout_marginLeft="60dp"
-                >
+                android:layout_marginTop="25dp"
+                android:layout_toRightOf="@id/water_auto_layout"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical">
 
                 <!--자동 조명 버튼-->
                 <ToggleButton
                     android:id="@+id/light_auto_btn"
                     android:layout_width="60dp"
                     android:layout_height="50dp"
-                    android:enabled="true"
-                    android:textOn=""
-                    android:textOff=""
                     android:background="@drawable/btn_light_auto"
+                    android:enabled="true"
+                    android:textOff=""
+                    android:textOn=""
 
-                    >
-                </ToggleButton>
+                    ></ToggleButton>
 
                 <!--자동 조명 ON/OFF 텍스트-->
                 <TextView
                     android:id="@+id/light_auto_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
+                    android:layout_marginTop="20px"
                     android:text="조명 OFF"
                     android:textColor="@color/black"
                     android:textSize="18dp"
-                    android:layout_marginTop="20px"
+                    android:textStyle="bold"
 
                     >
 
@@ -344,36 +394,34 @@
                 android:id="@+id/wind_auto_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_vertical|center_horizontal"
                 android:layout_below="@id/auto_text"
-                android:layout_toRightOf="@id/light_auto_layout"
-                android:layout_marginTop="25dp"
                 android:layout_marginLeft="50dp"
-                >
+                android:layout_marginTop="25dp"
+                android:layout_toRightOf="@id/light_auto_layout"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="vertical">
                 <!--자동 바람 버튼-->
                 <ToggleButton
                     android:id="@+id/wind_auto_btn"
                     android:layout_width="60dp"
                     android:layout_height="50dp"
-                    android:enabled="true"
-                    android:textOn=""
-                    android:textOff=""
                     android:background="@drawable/btn_wind_auto"
+                    android:enabled="true"
+                    android:textOff=""
+                    android:textOn=""
 
-                    >
-                </ToggleButton>
+                    ></ToggleButton>
 
                 <!--자동 바람 ON/OFF 텍스트-->
                 <TextView
                     android:id="@+id/wind_auto_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
+                    android:layout_marginTop="20px"
                     android:text="바람 OFF"
                     android:textColor="@color/black"
                     android:textSize="20dp"
-                    android:layout_marginTop="20px"
+                    android:textStyle="bold"
 
                     >
 
@@ -382,64 +430,66 @@
 
             <!-- 수동 조작 텍스트 뷰-->
             <TextView
+                android:id="@+id/hand_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/water_auto_layout"
-                android:id="@+id/hand_text"
-                android:text="수동 조작"
-                android:textSize="40dp"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:paddingTop="25dp"
                 android:paddingLeft="25dp"
+                android:paddingTop="25dp"
+                android:text="수동 조작"
+                android:textColor="@color/black"
+                android:textSize="40dp"
+                android:textStyle="bold"
 
-                >
-            </TextView>
+                ></TextView>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical|center_horizontal"
                 android:layout_below="@id/hand_text"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="horizontal"
 
                 >
+
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/hand_water_btn"
                     android:layout_width="100dp"
                     android:layout_height="50dp"
+                    android:layout_margin="10dp"
                     android:background="@drawable/btn_hand"
                     android:text="물 주기"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
                     android:textColor="@color/black"
-                    android:layout_margin="10dp"
-                    >
+                    android:textSize="20dp"
+                    android:textStyle="bold">
 
                 </androidx.appcompat.widget.AppCompatButton>
+
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/hand_light_btn"
                     android:layout_width="100dp"
                     android:layout_height="50dp"
+                    android:layout_margin="10dp"
                     android:background="@drawable/btn_hand"
                     android:text="조명 켜기"
+                    android:textColor="@color/black"
                     android:textSize="17dp"
                     android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_margin="10dp"
 
                     >
 
                 </androidx.appcompat.widget.AppCompatButton>
+
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/hand_wind_btn"
                     android:layout_width="110dp"
                     android:layout_height="50dp"
+                    android:layout_margin="7dp"
                     android:background="@drawable/btn_hand"
                     android:text="공기 순환 실행"
+                    android:textColor="@color/black"
                     android:textSize="15dp"
                     android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_margin="7dp"
 
                     >
 
