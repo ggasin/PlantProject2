@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dialogColor">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="346dp"
+        android:layout_height="450dp"
+        android:background="@drawable/popup_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/helpPopup_Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="도움말"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toTopOf="@+id/helpPopup_scroll_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/help_done_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="shutDownClick"
+            android:text="닫기"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ScrollView
+            android:id="@+id/helpPopup_scroll_layout"
+            android:layout_width="348dp"
+            android:layout_height="333dp"
+            app:layout_constraintBottom_toBottomOf="@+id/help_done_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.41">
+
+            <TextView
+                android:id="@+id/helpPopup_contents_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="이 어플은 식물과 원격으로 교감하기 위한 장치입니다.\n하단에는 센서를 통한 식물의 온습도 상태를 확인할 수 있고
+위로 드래그 하면 자동/수동으로 식물을 관리할 수 있습니다.\n\n이 어플은 식물과 원격으로 교감하기 위한 장치입니다.\n하단에는 센서를 통한 식물의 온습도 상태를 확인할 수 있고
+위로 드래그 하면 자동/수동으로 식물을 관리할 수 있습니다.\n\n이 어플은 식물과 원격으로 교감하기 위한 장치입니다.\n하단에는 센서를 통한 식물의 온습도 상태를 확인할 수 있고
+위로 드래그 하면 자동/수동으로 식물을 관리할 수 있습니다.\n\n이 어플은 식물과 원격으로 교감하기 위한 장치입니다.\n하단에는 센서를 통한 식물의 온습도 상태를 확인할 수 있고
+위로 드래그 하면 자동/수동으로 식물을 관리할 수 있습니다.\n\n이 어플은 식물과 원격으로 교감하기 위한 장치입니다.\n하단에는 센서를 통한 식물의 온습도 상태를 확인할 수 있고
+위로 드래그 하면 자동/수동으로 식물을 관리할 수 있습니다.\n\n이 어플은 식물과 원격으로 교감하기 위한 장치입니다.\n하단에는 센서를 통한 식물의 온습도 상태를 확인할 수 있고
+위로 드래그 하면 자동/수동으로 식물을 관리할 수 있습니다.\n\n이 어플은 식물과 원격으로 교감하기 위한 장치입니다.\n하단에는 센서를 통한 식물의 온습도 상태를 확인할 수 있고
+위로 드래그 하면 자동/수동으로 식물을 관리할 수 있습니다.\n\n이 어플은 식물과 원격으로 교감하기 위한 장치입니다.\n하단에는 센서를 통한 식물의 온습도 상태를 확인할 수 있고
+위로 드래그 하면 자동/수동으로 식물을 관리할 수 있습니다.\n\n이 어플은 식물과 원격으로 교감하기 위한 장치입니다.\n하단에는 센서를 통한 식물의 온습도 상태를 확인할 수 있고
+위로 드래그 하면 자동/수동으로 식물을 관리할 수 있습니다.\n\n이 어플은 식물과 원격으로 교감하기 위한 장치입니다.\n하단에는 센서를 통한 식물의 온습도 상태를 확인할 수 있고
+위로 드래그 하면 자동/수동으로 식물을 관리할 수 있습니다.\n\n이 어플은 식물과 원격으로 교감하기 위한 장치입니다.\n하단에는 센서를 통한 식물의 온습도 상태를 확인할 수 있고
+위로 드래그 하면 자동/수동으로 식물을 관리할 수 있습니다.\n\n이 어플은 식물과 원격으로 교감하기 위한 장치입니다.\n하단에는 센서를 통한 식물의 온습도 상태를 확인할 수 있고
+위로 드래그 하면 자동/수동으로 식물을 관리할 수 있습니다.\n\n이 어플은 식물과 원격으로 교감하기 위한 장치입니다.\n하단에는 센서를 통한 식물의 온습도 상태를 확인할 수 있고
+위로 드래그 하면 자동/수동으로 식물을 관리할 수 있습니다.\n\n이 어플은 식물과 원격으로 교감하기 위한 장치입니다.\n하단에는 센서를 통한 식물의 온습도 상태를 확인할 수 있고
+위로 드래그 하면 자동/수동으로 식물을 관리할 수 있습니다.\n\n이 어플은 식물과 원격으로 교감하기 위한 장치입니다.\n하단에는 센서를 통한 식물의 온습도 상태를 확인할 수 있고
+위로 드래그 하면 자동/수동으로 식물을 관리할 수 있습니다.\n\n이 어플은 식물과 원격으로 교감하기 위한 장치입니다.\n하단에는 센서를 통한 식물의 온습도 상태를 확인할 수 있고
+위로 드래그 하면 자동/수동으로 식물을 관리할 수 있습니다.\n
+"
+                android:textColor="@color/black" />
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

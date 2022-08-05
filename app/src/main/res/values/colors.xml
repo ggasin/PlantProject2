@@ -16,4 +16,7 @@
     <color name="on_green">#20B25D</color>
     <color name="green">#08A600</color>
     <color name="deep_green">#216940</color>
+    <color name="dialogColor">#A6333333</color>
+    <color name="beige">#FCF6F5</color>
+    <color name="background">#2BAE66</color>
 </resources>

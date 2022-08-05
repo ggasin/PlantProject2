@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.sothree.slidinguppanel.SlidingUpPanelLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_panel"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    android:background="#2BAE66"
     android:gravity="bottom"
-    android:background="@color/green_back"
     app:umanoDragView="@id/drawer"
-    app:umanoPanelHeight="125dp"
     app:umanoOverlay="true"
-    app:umanoShadowHeight="0dp">
-
+    app:umanoPanelHeight="125dp"
+    app:umanoShadowHeight="0dp"
+    tools:context=".MainActivity">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <!--말풍선 -->
 
@@ -83,7 +80,7 @@
             android:layout_height="wrap_content"
             android:text="null"
 
-            android:textColor="@color/white"
+            android:textColor="#2BAE66"
             android:textSize="25dp"
             android:textStyle="bold"
 
@@ -150,21 +147,21 @@
 
     <!--슬라이드 레이아웃 -->
     <LinearLayout
-        android:background="@color/colorTransparent"
         android:id="@+id/drawer"
         android:layout_width="match_parent"
         android:layout_height="500dp"
+        android:background="@color/colorTransparent"
         android:orientation="vertical">
 
         <!-- 슬라이드 올리는 막대기-->
         <View
             android:id="@+id/swipe"
-            android:background="@drawable/swipe_tip_background"
             android:layout_width="60dp"
             android:layout_height="5dp"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_gravity="center_horizontal"/>
+            android:background="@drawable/swipe_tip_background" />
 
         <!--슬라이드 레이아웃 -->
         <RelativeLayout
@@ -501,9 +498,6 @@
 
 
     </LinearLayout>
-
-
-
 
 
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>

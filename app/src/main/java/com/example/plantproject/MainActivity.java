@@ -64,8 +64,6 @@ public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     View drawerView;
 
-
-
     //db이름 enum으로 저장. 나중에 변경 용이하도록
     public enum DbName {
         BUTTON("button"), OPERATION("operation"), USERACCOUNT("UserAccount"),
@@ -466,6 +464,14 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this,MyPageActivity.class);
                 intent.putExtra("qr",qr);
                 startActivity(intent);
+            }
+        });
+        goHelpBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,HelpPopupActivity.class);
+                startActivityForResult(intent,1);
+
             }
         });
 

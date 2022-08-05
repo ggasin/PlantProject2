@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -52,65 +53,57 @@ public class LoginActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("plant");
         Pattern pattern = Patterns.EMAIL_ADDRESS;
-        if(mFirebaseAuth.getCurrentUser() == null){
 
-        }
-
+        Log.d("현재 로그인","없음");
         loginButton.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View view) {
-                    String strId = idText.getText().toString();
-                    String strPwd = pwdText.getText().toString();
-                    Intent intent = new Intent(LoginActivity.this , MainActivity.class);
-                    if(pattern.matcher(strId).matches()&&strPwd.length()>5){
-                        mFirebaseAuth.signInWithEmailAndPassword(strId,strPwd).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if(task.isSuccessful()){
-                                    //로그인 성공
-                                    mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            for(DataSnapshot sh : snapshot.getChildren()){
-                                                mDatabaseRef.child(sh.getKey()).child("UserAccount").child("emailId").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                                        if (task.isSuccessful()) {
-                                                            if (task.getResult().getValue().toString().equals(idText.getText().toString())){
-                                                                intent.putExtra("qr",sh.getKey().toString());
-                                                                startActivity(intent);
-                                                                finish();
+                   String strId = idText.getText().toString();
+                   String strPwd = pwdText.getText().toString();
+                   Intent intent = new Intent(LoginActivity.this , MainActivity.class);
+                   if(pattern.matcher(strId).matches()&&strPwd.length()>5){
+                       mFirebaseAuth.signInWithEmailAndPassword(strId,strPwd).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                           @Override
+                           public void onComplete(@NonNull Task<AuthResult> task) {
+                               if(task.isSuccessful()){
+                                   //로그인 성공
+                                   mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                       @Override
+                                       public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                           for(DataSnapshot sh : snapshot.getChildren()){
+                                               mDatabaseRef.child(sh.getKey()).child("UserAccount").child("emailId").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                                   @Override
+                                                   public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                                       if (task.isSuccessful()) {
+                                                           if (task.getResult().getValue().toString().equals(idText.getText().toString())){
+                                                               intent.putExtra("qr",sh.getKey().toString());
+                                                               Toast.makeText(getApplicationContext(),"로그인에 성공하였습니다.",Toast.LENGTH_SHORT).show();
+                                                               Log.d("qr",intent.getStringExtra("qr"));
+                                                               startActivity(intent);
+                                                           }
+                                                           else{
+                                                               Log.d("qr찾기 실패","실패");
+                                                           }
+                                                       }
+                                                   }
+                                               });
+                                           }
+                                       }
+                                       @Override
+                                       public void onCancelled(@NonNull DatabaseError error) {
+                                       }
+                                   });
 
-                                                                Toast.makeText(getApplicationContext(),"로그인에 성공하였습니다.",Toast.LENGTH_SHORT).show();
-                                                                Log.d("qr",intent.getStringExtra("qr"));
-                                                            }
-                                                            else{
-                                                                Log.d("qr찾기 실패","실패");
-                                                            }
-                                                        }
-                                                    }
-                                                });
-                                            }
-                                        }
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error) {
-                                        }
-                                    });
-
-                                }else {
-                                    Toast.makeText(getApplicationContext(),"아이디와 비밀번호를 다시 확인해주세요.",Toast.LENGTH_SHORT).show();
-                                }
-
-                            }
-                        });
-                    } else {
-                        Toast.makeText(getApplicationContext(),"아이디와 비밀번호를 다시 확인해주세요.",Toast.LENGTH_SHORT).show();
-                    }
-
-
-
+                               }else {
+                                   Toast.makeText(getApplicationContext(),"존재하지 않는 아이디거나 비밀번호가 틀렸습니다.",Toast.LENGTH_SHORT).show();
+                               }
+                           }
+                       });
+                   } else {
+                       Toast.makeText(getApplicationContext(),"아이디와 비밀번호를 다시 확인해주세요.",Toast.LENGTH_SHORT).show();
+                   }
                }
-            }
+           }
         );
         goRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,6 +119,7 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"클릭", Toast.LENGTH_SHORT).show();
             }
         });
+
 
 
     }
