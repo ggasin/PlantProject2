@@ -53,8 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("plant");
         Pattern pattern = Patterns.EMAIL_ADDRESS;
-
-        Log.d("현재 로그인","없음");
+        //로그인 버튼 리스너
         loginButton.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View view) {
@@ -105,6 +104,7 @@ public class LoginActivity extends AppCompatActivity {
                }
            }
         );
+        //회원가입 버튼 리스너
         goRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,6 +113,7 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+        //아이디 찾기 (아직 구현 x)
         forgetBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -10,6 +10,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ import java.util.regex.Pattern;
 public class MyPageActivity extends AppCompatActivity {
     private TextView myQrText, canUseIdText, myCheckPwdText, goLogoutTextbtn, myCheckOverSixPwdText, myCanUseNameText, myCanUseTelText;
     private Button modifyBtn, modifyCompleteBtn;
+    private ImageButton goBackBtn;
     private FirebaseAuth mFirebaseAuth;
     private DatabaseReference mDatabaseRef;
     private EditText myEditEmailId, myEditPwd, myEditName, myEditTel, myEditCheckPwd;
@@ -65,7 +67,7 @@ public class MyPageActivity extends AppCompatActivity {
         goLogoutTextbtn = findViewById(R.id.goLogoutText_btn);
         modifyBtn = findViewById(R.id.modify_btn);
         modifyCompleteBtn = findViewById(R.id.modify_complete_btn);
-
+        goBackBtn = findViewById(R.id.myPage_goBack_btn);
 
         myCanUseNameText = findViewById(R.id.myCanUseName_text);
         myCanUseTelText = findViewById(R.id.myCanUseTel_text);
@@ -164,9 +166,9 @@ public class MyPageActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 isNameOK = true;
-
+                //여기 true를 안해주면 아무것도 변경하지 않고 수정완료를 눌렀을 때 afterTextChanged에서 false값을 넘겨줘서
+                //beforeTextChanged에 각 boolean값마다 true를 넣어주니 해결됨.
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if(!beforeModify){
@@ -184,7 +186,6 @@ public class MyPageActivity extends AppCompatActivity {
                 }
 
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
                 if (myEditName.getText().toString().equals("")&&!beforeModify){
@@ -199,12 +200,9 @@ public class MyPageActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 isTelOK = true;
-
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
                 if(!beforeModify){
                     myCanUseTelText.setVisibility(View.VISIBLE);
                     if(myEditTel.getText().length()<10){
@@ -218,7 +216,6 @@ public class MyPageActivity extends AppCompatActivity {
                         isTelOK = true;
                     }
                 }
-
             }
 
             @Override
@@ -230,14 +227,11 @@ public class MyPageActivity extends AppCompatActivity {
             }
         });
 
-
-
         //비밀번호 editText 변경 이벤트
         myEditPwd.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 isPwdOK = true;
-
             }
 
             @Override
@@ -302,8 +296,6 @@ public class MyPageActivity extends AppCompatActivity {
             }
         });
 
-
-
         //로그인 화면으로 돌아가기
         goLogoutTextbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -315,5 +307,14 @@ public class MyPageActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        //뒤로가기 버튼
+        goBackBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
     }
 }

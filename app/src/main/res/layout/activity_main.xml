@@ -46,6 +46,9 @@
             app:layout_constraintTop_toBottomOf="@+id/mypage_btn" />
 
 
+        <!--식물 그림-->
+
+        <!--말풍선 안에 들어가는 텍스트-->
         <ImageView
             android:id="@+id/speechBubble"
             android:layout_width="352dp"
@@ -55,25 +58,11 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.6"
+            app:layout_constraintVertical_bias="0.67"
             app:srcCompat="@drawable/rectangle">
 
         </ImageView>
 
-        <!--식물 그림-->
-        <ImageView
-            android:id="@+id/plantPot"
-            android:layout_width="177dp"
-            android:layout_height="190dp"
-            android:layout_marginTop="60dp"
-            app:layout_constraintBottom_toTopOf="@+id/speechBubble"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/plantpot" />
-
-        <!--말풍선 안에 들어가는 텍스트-->
         <TextView
             android:id="@+id/plant_text"
             android:layout_width="wrap_content"
@@ -140,6 +129,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.02"
             app:srcCompat="@drawable/help_icon" />
+
+        <ImageView
+            android:id="@+id/plantpot"
+            android:layout_width="250dp"
+            android:layout_height="300dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.188"
+            app:srcCompat="@drawable/plantpot" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -348,7 +349,7 @@
 
             <!--자동 조명 레이아웃 -->
             <LinearLayout
-                android:id="@+id/light_auto_layout"
+                android:id="@+id/led_auto_layout"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/auto_text"
@@ -360,7 +361,7 @@
 
                 <!--자동 조명 버튼-->
                 <ToggleButton
-                    android:id="@+id/light_auto_btn"
+                    android:id="@+id/led_auto_btn"
                     android:layout_width="60dp"
                     android:layout_height="50dp"
                     android:background="@drawable/btn_light_auto"
@@ -372,7 +373,7 @@
 
                 <!--자동 조명 ON/OFF 텍스트-->
                 <TextView
-                    android:id="@+id/light_auto_text"
+                    android:id="@+id/led_auto_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20px"
@@ -388,18 +389,18 @@
 
             <!--자동 바람 레이아웃 -->
             <LinearLayout
-                android:id="@+id/wind_auto_layout"
+                android:id="@+id/cooler_auto_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/auto_text"
                 android:layout_marginLeft="50dp"
                 android:layout_marginTop="25dp"
-                android:layout_toRightOf="@id/light_auto_layout"
+                android:layout_toRightOf="@id/led_auto_layout"
                 android:gravity="center_vertical|center_horizontal"
                 android:orientation="vertical">
                 <!--자동 바람 버튼-->
                 <ToggleButton
-                    android:id="@+id/wind_auto_btn"
+                    android:id="@+id/cooler_auto_btn"
                     android:layout_width="60dp"
                     android:layout_height="50dp"
                     android:background="@drawable/btn_wind_auto"
@@ -411,7 +412,7 @@
 
                 <!--자동 바람 ON/OFF 텍스트-->
                 <TextView
-                    android:id="@+id/wind_auto_text"
+                    android:id="@+id/cooler_auto_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20px"
@@ -463,7 +464,7 @@
                 </androidx.appcompat.widget.AppCompatButton>
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/hand_light_btn"
+                    android:id="@+id/hand_led_btn"
                     android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:layout_margin="10dp"
@@ -478,7 +479,7 @@
                 </androidx.appcompat.widget.AppCompatButton>
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/hand_wind_btn"
+                    android:id="@+id/hand_cooler_btn"
                     android:layout_width="110dp"
                     android:layout_height="50dp"
                     android:layout_margin="7dp"

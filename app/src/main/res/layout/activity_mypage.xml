@@ -258,17 +258,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-
-    <ImageView
-        android:id="@+id/goBack_btn"
+    <ImageButton
+        android:id="@+id/myPage_goBack_btn"
         android:layout_width="40dp"
-        android:layout_height="44dp"
-        app:layout_constraintBottom_toTopOf="@+id/information_text"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:background="?attr/actionBarItemBackground"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.03"
+        app:layout_constraintHorizontal_bias="0.043"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.6"
         app:srcCompat="@android:drawable/ic_menu_revert" />
 
 
