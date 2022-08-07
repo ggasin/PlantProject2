@@ -5,7 +5,7 @@
     android:id="@+id/main_panel"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#2BAE66"
+    android:background="@drawable/background"
     android:gravity="bottom"
     app:umanoDragView="@id/drawer"
     app:umanoOverlay="true"
@@ -14,9 +14,11 @@
     tools:context=".MainActivity">
 
 
+    <!--슬라이드 레이아웃 -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/background">
 
         <!--말풍선 -->
 
@@ -49,16 +51,18 @@
         <!--식물 그림-->
 
         <!--말풍선 안에 들어가는 텍스트-->
+
         <ImageView
             android:id="@+id/speechBubble"
-            android:layout_width="352dp"
-            android:layout_height="177dp"
+            android:layout_width="380dp"
+            android:layout_height="160dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.67"
+            app:layout_constraintVertical_bias="0.77"
             app:srcCompat="@drawable/rectangle">
 
         </ImageView>
@@ -69,7 +73,7 @@
             android:layout_height="wrap_content"
             android:text="null"
 
-            android:textColor="#2BAE66"
+            android:textColor="@color/background"
             android:textSize="25dp"
             android:textStyle="bold"
 
@@ -131,22 +135,53 @@
             app:srcCompat="@drawable/help_icon" />
 
         <ImageView
-            android:id="@+id/plantpot"
-            android:layout_width="250dp"
-            android:layout_height="300dp"
+            android:id="@+id/circle_profile_icon"
+            android:layout_width="280dp"
+            android:layout_height="280dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.188"
+            app:layout_constraintVertical_bias="0.19"
+            app:srcCompat="@drawable/circle" />
+
+        <ImageView
+            android:id="@+id/plantpot"
+            android:layout_width="200dp"
+            android:layout_height="250dp"
+            app:layout_constraintBottom_toBottomOf="@+id/circle_profile_icon"
+            app:layout_constraintEnd_toEndOf="@+id/circle_profile_icon"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="@+id/circle_profile_icon"
+            app:layout_constraintTop_toTopOf="@+id/circle_profile_icon"
+            app:layout_constraintVertical_bias="0.0"
             app:srcCompat="@drawable/plantpot" />
+
+        <ImageView
+            android:id="@+id/name_tag_icon"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            app:layout_constraintBottom_toTopOf="@+id/speechBubble"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/circle_profile_icon"
+            app:srcCompat="@drawable/name_tag" />
+
+        <TextView
+            android:id="@+id/nickName_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/name_tag_icon"
+            app:layout_constraintEnd_toEndOf="@+id/name_tag_icon"
+            app:layout_constraintStart_toStartOf="@+id/name_tag_icon"
+            app:layout_constraintTop_toTopOf="@+id/name_tag_icon" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <!--슬라이드 레이아웃 -->
     <LinearLayout
         android:id="@+id/drawer"
         android:layout_width="match_parent"

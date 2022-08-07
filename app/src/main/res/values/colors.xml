@@ -6,6 +6,7 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
+    <color name="transBlack">#4D000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="colorTransparent">#00FFFFFF</color>
     <color name="grey_200">#F0F0F0</color>
@@ -18,5 +19,5 @@
     <color name="deep_green">#216940</color>
     <color name="dialogColor">#A6333333</color>
     <color name="beige">#FCF6F5</color>
-    <color name="background">#2BAE66</color>
+    <color name="background">#E62BAE66</color>
 </resources>

@@ -3,11 +3,16 @@ package com.example.plantproject;
 public class UserAccount {
     private String idToken; //firebase UID 고유 토큰 정보
     private String name;
+    private String nickName;
     private String tel;
     private String emailId;
     private String pwd;
     private String qr;
     public UserAccount() { }
+
+    public String getNickName() {return nickName;}
+
+    public void setNickName(String nickName) {this.nickName = nickName;}
 
     public String getQr() {
         return qr;

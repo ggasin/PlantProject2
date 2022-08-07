@@ -30,18 +30,18 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import java.util.regex.Pattern;
 
 public class MyPageActivity extends AppCompatActivity {
-    private TextView myQrText, canUseIdText, myCheckPwdText, goLogoutTextbtn, myCheckOverSixPwdText, myCanUseNameText, myCanUseTelText;
+    private TextView myQrText, myCheckPwdText, goLogoutTextbtn, myCheckOverSixPwdText, myCanUseNameText, myCanUseTelText,myCanUseNickNameText;
     private Button modifyBtn, modifyCompleteBtn;
     private ImageButton goBackBtn;
     private FirebaseAuth mFirebaseAuth;
     private DatabaseReference mDatabaseRef;
-    private EditText myEditEmailId, myEditPwd, myEditName, myEditTel, myEditCheckPwd;
-    boolean isNameOK, isTelOK, isPwdOK, isPwdCheckOK = true;
+    private EditText myEditEmailId, myEditPwd, myEditName, myEditNickName,myEditTel, myEditCheckPwd;
+    boolean isNameOK, isNickNameOK,isTelOK, isPwdOK, isPwdCheckOK = true;
     boolean beforeModify = true; // 처음 마이페이지에 들어가면 숨겨두었던 유효성검사 텍스트들이 떠서 이를 막기위한 변수. 수정전 상태면 true.
     int overLapCnt, childNum = 0;
     public enum DbName {
         BUTTON("button"), OPERATION("operation"), USERACCOUNT("UserAccount"),
-        EMAILID("emailId"),NAME("name"),TEL("tel"),PWD("pwd"),
+        EMAILID("emailId"),NICKNAME("nickName"),NAME("name"),TEL("tel"),PWD("pwd"),
         QR("qr"),AUTO("auto"),NONAUTO("nonauto"),LED("LED"),WATER("water"), COOLER("cooler"),
         SENSORS("sensors"),HUM("Hum"),TEMP("Temp"),SOILHUM("soil_hum");
         private final String label;
@@ -63,6 +63,7 @@ public class MyPageActivity extends AppCompatActivity {
         myEditEmailId = findViewById(R.id.my_emailId);
         myEditPwd = findViewById(R.id.my_pwd);
         myEditCheckPwd = findViewById(R.id.my_CheckPwd);
+        myEditNickName = findViewById(R.id.my_nick_name);
 
         goLogoutTextbtn = findViewById(R.id.goLogoutText_btn);
         modifyBtn = findViewById(R.id.modify_btn);
@@ -70,6 +71,7 @@ public class MyPageActivity extends AppCompatActivity {
         goBackBtn = findViewById(R.id.myPage_goBack_btn);
 
         myCanUseNameText = findViewById(R.id.myCanUseName_text);
+        myCanUseNickNameText = findViewById(R.id.myCanUseNickName_text);
         myCanUseTelText = findViewById(R.id.myCanUseTel_text);
         myCheckOverSixPwdText = findViewById(R.id.myCheckOverSixPwd_text);
         myCheckPwdText = findViewById(R.id.myCheckPwd_text);
@@ -91,16 +93,17 @@ public class MyPageActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot sh : snapshot.getChildren()){
-                    if(sh.getKey().equals("emailId")){
+                    if(sh.getKey().equals(DbName.EMAILID.label())){
                         myEditEmailId.setText(sh.getValue().toString());
-                    } else if(sh.getKey().equals("name")){
+                    } else if(sh.getKey().equals(DbName.NICKNAME.label())){
+                        myEditNickName.setText(sh.getValue().toString());
+                    } else if(sh.getKey().equals(DbName.NAME.label())){
                         myEditName.setText(sh.getValue().toString());
-                    } else if(sh.getKey().equals("pwd")){
+                    } else if(sh.getKey().equals(DbName.PWD.label())){
                         myEditPwd.setText(sh.getValue().toString());
                         myEditCheckPwd.setText(sh.getValue().toString());
-                    } else if(sh.getKey().equals("tel")){
+                    } else if(sh.getKey().equals(DbName.TEL.label())){
                         myEditTel.setText(sh.getValue().toString());
-
                     }
                 }
             }
@@ -117,6 +120,7 @@ public class MyPageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 beforeModify = false;
                 myEditName.setEnabled(true);
+                myEditNickName.setEnabled(true);
                 myEditTel.setEnabled(true);
                 myEditPwd.setEnabled(true);
                 myEditCheckPwd.setEnabled(true);
@@ -130,22 +134,27 @@ public class MyPageActivity extends AppCompatActivity {
         modifyCompleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isNameOK&&isTelOK&&isPwdOK&&isPwdCheckOK){
+                if(isNameOK&&isNickNameOK&&isTelOK&&isPwdOK&&isPwdCheckOK){
                     mDatabaseRef.child(intent.getStringExtra("qr")).child(DbName.USERACCOUNT.label()).child(DbName.NAME.label()).setValue(myEditName.getText().toString());
+                    mDatabaseRef.child(intent.getStringExtra("qr")).child(DbName.USERACCOUNT.label()).child(DbName.NICKNAME.label()).setValue(myEditNickName.getText().toString());
                     mDatabaseRef.child(intent.getStringExtra("qr")).child(DbName.USERACCOUNT.label()).child(DbName.TEL.label()).setValue(myEditTel.getText().toString());
                     mDatabaseRef.child(intent.getStringExtra("qr")).child(DbName.USERACCOUNT.label()).child(DbName.PWD.label()).setValue(myEditPwd.getText().toString());
                     mFirebaseAuth.getCurrentUser().updatePassword(myEditPwd.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
-                                Toast.makeText(getApplicationContext(), "수정 완료 되었습니다.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "수정 완료 되었습니다.", Toast.LENGTH_SHORT).show();
+                                Log.d("현재 사용자",mFirebaseAuth.getCurrentUser().getEmail());
+                                Log.d("비밀번호",myEditPwd.getText().toString());
                             }else{
-                                Toast.makeText(getApplicationContext(), "수정에 실패 했습니다.", Toast.LENGTH_LONG).show();
-
+                                Toast.makeText(getApplicationContext(), "수정에 실패 했습니다.", Toast.LENGTH_SHORT).show();
+                                Log.d("현재 사용자",mFirebaseAuth.getCurrentUser().getEmail());
+                                Log.d("비밀번호",myEditPwd.getText().toString());
                             }
                         }
                     });
                     myEditName.setEnabled(false);
+                    myEditNickName.setEnabled(false);
                     myEditTel.setEnabled(false);
                     myEditEmailId.setEnabled(false);
                     myEditPwd.setEnabled(false);
@@ -156,7 +165,7 @@ public class MyPageActivity extends AppCompatActivity {
                 }
                 else {
                     Toast.makeText(getApplicationContext(),"정보를 제대로 기입했는지 확인해주세요.",Toast.LENGTH_SHORT).show();
-                    Log.d("이름,번호,비번,비번체크",String.valueOf(isNameOK)+","+String.valueOf(isTelOK)+","+String.valueOf(isPwdOK)+","+String.valueOf(isPwdOK));
+                    Log.d("이름,닉네임,번호,비번,비번체크",String.valueOf(isNameOK)+","+String.valueOf(isNickNameOK)+","+String.valueOf(isTelOK)+","+String.valueOf(isPwdOK)+","+String.valueOf(isPwdOK));
                 }
             }
         });
@@ -184,7 +193,6 @@ public class MyPageActivity extends AppCompatActivity {
                         isNameOK = true;
                     }
                 }
-
             }
             @Override
             public void afterTextChanged(Editable editable) {
@@ -194,7 +202,38 @@ public class MyPageActivity extends AppCompatActivity {
                 }
             }
         });
+        //별명 editText 변경 이벤트
+        myEditNickName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                isNickNameOK = true;
+            }
 
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(!beforeModify){
+                    myCanUseNickNameText.setVisibility(View.VISIBLE);
+                   if(myEditNickName.getText().length()>4){
+                        myCanUseNickNameText.setText("별명은 네글자 이하로 작성해주세요.");
+                        myCanUseNickNameText.setTextColor(Color.parseColor("#FF0000")); //빨간색
+                        isNickNameOK = false;
+                    }
+                    else{
+                        myCanUseNickNameText.setText("사용 가능한 별명입니다.");
+                        myCanUseNickNameText.setTextColor(Color.parseColor("#08A600")); //초록색
+                        isNickNameOK = true;
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (myEditNickName.getText().toString().equals("")&&!beforeModify){
+                    myCanUseNickNameText.setVisibility(View.GONE);
+                    isNickNameOK = false;
+                }
+            }
+        });
         //전화번호 editText 변경 이벤트
         myEditTel.addTextChangedListener(new TextWatcher() {
             @Override
@@ -232,6 +271,8 @@ public class MyPageActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 isPwdOK = true;
+                myEditCheckPwd.setText("");
+                isPwdCheckOK=false;
             }
 
             @Override
@@ -271,7 +312,6 @@ public class MyPageActivity extends AppCompatActivity {
             }
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
                 if(!beforeModify){
                     myCheckPwdText.setVisibility(View.VISIBLE);
                     if(myEditCheckPwd.getText().toString().equals(myEditPwd.getText().toString())){

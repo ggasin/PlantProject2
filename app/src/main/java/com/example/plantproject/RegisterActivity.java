@@ -38,12 +38,12 @@ import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
     private IntentIntegrator qrScan;
-    private TextView qrResultText,canUseIdText,checkPwdText, goLoginTextbtn,checkOverSixPwdText,canUseNameText, canUseTelText;
+    private TextView qrResultText,canUseIdText,checkPwdText, goLoginTextbtn,checkOverSixPwdText,canUseNameText, canUseTelText,canUseNickNameText;
     private Button qrScanBtn,registerBtn, idOverLapBtn;
     private FirebaseAuth mFirebaseAuth;
     private DatabaseReference mDatabaseRef;
-    private EditText editEmailId,regEditPwd,editName,editTel,checkEditPwd;
-    boolean isNameOK,isTelOK,isEmailIdOK,isPwdOK,isPwdCheckOK,isQrOK = false;
+    private EditText editEmailId,regEditPwd,editName,editNickName,editTel,checkEditPwd;
+    boolean isNameOK,isNickNameOK,isTelOK,isEmailIdOK,isPwdOK,isPwdCheckOK,isQrOK = false;
     int overLapCnt, childNum =0;
     //db이름 enum으로 저장. 나중에 변경 용이하도록
     public enum DbName {
@@ -63,34 +63,33 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
+        //editText 변수
         editName = findViewById(R.id.edit_name);
         editTel = findViewById(R.id.edit_tel);
         editEmailId = findViewById(R.id.reg_edit_emailId);
-        canUseIdText = findViewById(R.id.canUseId_text);
+        editNickName = findViewById(R.id.edit_nickName);
         regEditPwd = findViewById(R.id.reg_edit_pwd);
         checkEditPwd = findViewById(R.id.edit_CheckPwd);
-        checkPwdText = findViewById(R.id.checkPwd_text);
-        goLoginTextbtn = findViewById(R.id.go_login_text_btn);
-        registerBtn = findViewById(R.id.register_btn);
+        //textView 변수
+        canUseIdText = findViewById(R.id.canUseId_text);
         canUseNameText = findViewById(R.id.canUseName_text);
         canUseTelText = findViewById(R.id.canUseTel_text);
+        canUseNickNameText = findViewById(R.id.canUseNickName_text);
+        checkPwdText = findViewById(R.id.checkPwd_text);
         checkOverSixPwdText = findViewById(R.id.checkOverSixPwd_text);
+        //Button 변수
+        goLoginTextbtn = findViewById(R.id.go_login_text_btn);
+        registerBtn = findViewById(R.id.register_btn);
         idOverLapBtn = findViewById(R.id.idOverlap_btn);
-
         //qr스캔 관련 변수
         qrScanBtn = (Button)findViewById(R.id.qrScan_btn);
         qrResultText = (TextView) findViewById(R.id.qrResult_text);
         qrScan = new IntentIntegrator(this);
-
         //파이어베이스 관련 변수
         mFirebaseAuth = FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("plant");
-
         //이메일형식인지 확인하는데 사용
         Pattern pattern = Patterns.EMAIL_ADDRESS;
-
-
         //qr스캔 버튼 클릭 이벤트
         qrScanBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,7 +105,6 @@ public class RegisterActivity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 canUseNameText.setVisibility(View.VISIBLE);
@@ -121,7 +119,6 @@ public class RegisterActivity extends AppCompatActivity {
                     isNameOK = true;
                 }
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editName.getText().toString().equals("")){
@@ -130,14 +127,46 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+        //식물별명 editText 변경 이벤트
+        editNickName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                canUseNickNameText.setVisibility(View.VISIBLE);
+                if(editNickName.getText().length()<1){
+                    canUseNickNameText.setText("별명을 한글자 이상 입력해 주세요.");
+                    canUseNickNameText.setTextColor(Color.parseColor("#FF0000")); //빨간색
+                    isNickNameOK = false;
+                }
+                else if(editNickName.getText().length()>4){
+                    canUseNickNameText.setText("별명은 네글자 이하로 작성해주세요.");
+                    canUseNickNameText.setTextColor(Color.parseColor("#FF0000")); //초록색
+                    isNickNameOK = false;
+                } else {
+                    canUseNickNameText.setText("사용가능한 별명입니다.");
+                    canUseNickNameText.setTextColor(Color.parseColor("#08A600")); //초록색
+                    isNickNameOK = true;
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editNickName.getText().toString().equals("")){
+                    canUseNickNameText.setVisibility(View.GONE);
+                    isNickNameOK = false;
+                }
+            }
+        });
         //전화번호 editText 변경 이벤트
         editTel.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 canUseTelText.setVisibility(View.VISIBLE);
@@ -196,6 +225,8 @@ public class RegisterActivity extends AppCompatActivity {
         regEditPwd.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                checkEditPwd.setText("");
+                isPwdCheckOK=false;
 
             }
 
@@ -263,17 +294,19 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String strName = editName.getText().toString();
+                String strNickName = editNickName.getText().toString();
                 String strEmailId = editEmailId.getText().toString();
                 String strTel = editTel.getText().toString();
                 String strPwd = regEditPwd.getText().toString();
                 String strQr = qrResultText.getText().toString();
                 Log.d("이메일OK", String.valueOf(isEmailIdOK));
+                Log.d("닉네임OK", String.valueOf(isNickNameOK));
                 Log.d("이름OK", String.valueOf(isNameOK));
                 Log.d("번호OK", String.valueOf(isTelOK));
                 Log.d("비밀OK", String.valueOf(isPwdOK));
                 Log.d("비밀확인OK", String.valueOf(isPwdCheckOK));
                 Log.d("큐알OK", String.valueOf(isQrOK));
-                if (isEmailIdOK & isNameOK & isTelOK & isPwdOK & isPwdCheckOK & isQrOK) {
+                if (isEmailIdOK & isNickNameOK & isNameOK & isTelOK & isPwdOK & isPwdCheckOK & isQrOK) {
                     mFirebaseAuth.createUserWithEmailAndPassword(strEmailId, strPwd).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -296,6 +329,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 account.setEmailId(firebaseUser.getEmail()); // 로그인을 하는 정확한 이메일이 필요하기 때문에 firebaseUser에서 정보를 가져옴
                                 account.setPwd(strPwd);
                                 account.setName(strName);
+                                account.setNickName(strNickName);
                                 account.setTel(strTel);
                                 account.setQr(strQr);
                                 mDatabaseRef.child(account.getQr()).child(DbName.USERACCOUNT.label()).setValue(account);
