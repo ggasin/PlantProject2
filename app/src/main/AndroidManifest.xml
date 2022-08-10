@@ -23,13 +23,9 @@
         <activity
             android:name=".LoginActivity"
             android:exported="true">
-
-
         </activity>
         <activity android:name=".HelpPopupActivity"
             android:theme="@style/DialogTheme"/>
-
-
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -42,6 +38,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".FindIdActivity"></activity>
+        <activity android:name=".FindPwdActivity"></activity>
+        <activity android:name=".SettingAutoActivity"></activity>
     </application>
 
 </manifest>

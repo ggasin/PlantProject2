@@ -1,5 +1,6 @@
 package com.example.plantproject;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,22 +16,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.zxing.integration.android.IntentIntegrator;
 
 import java.util.regex.Pattern;
 
 public class MyPageActivity extends AppCompatActivity {
-    private TextView myQrText, myCheckPwdText, goLogoutTextbtn, myCheckOverSixPwdText, myCanUseNameText, myCanUseTelText,myCanUseNickNameText;
+    private TextView myQrText, myCheckPwdText, goLogoutTextbtn, deleteIdTextBtn,myCheckOverSixPwdText, myCanUseNameText, myCanUseTelText,myCanUseNickNameText;
     private Button modifyBtn, modifyCompleteBtn;
     private ImageButton goBackBtn;
     private FirebaseAuth mFirebaseAuth;
@@ -39,11 +41,12 @@ public class MyPageActivity extends AppCompatActivity {
     boolean isNameOK, isNickNameOK,isTelOK, isPwdOK, isPwdCheckOK = true;
     boolean beforeModify = true; // 처음 마이페이지에 들어가면 숨겨두었던 유효성검사 텍스트들이 떠서 이를 막기위한 변수. 수정전 상태면 true.
     int overLapCnt, childNum = 0;
+    //db이름 enum으로 저장. 나중에 변경 용이하도록
     public enum DbName {
         BUTTON("button"), OPERATION("operation"), USERACCOUNT("UserAccount"),
-        EMAILID("emailId"),NICKNAME("nickName"),NAME("name"),TEL("tel"),PWD("pwd"),
+        EMAILID("emailId"),NAME("name"),NICKNAME("nickName"),TEL("tel"),PWD("pwd"),
         QR("qr"),AUTO("auto"),NONAUTO("nonauto"),LED("LED"),WATER("water"), COOLER("cooler"),
-        SENSORS("sensors"),HUM("Hum"),TEMP("Temp"),SOILHUM("soil_hum");
+        SENSORS("sensors"),HUM("Hum"),TEMP("Temp"),SOILHUM("soil_hum"),AUTOSTANDARD("autoStandard");
         private final String label;
         DbName(String label){
             this.label = label;
@@ -66,6 +69,7 @@ public class MyPageActivity extends AppCompatActivity {
         myEditNickName = findViewById(R.id.my_nick_name);
 
         goLogoutTextbtn = findViewById(R.id.goLogoutText_btn);
+        deleteIdTextBtn = findViewById(R.id.deleteIdText_btn);
         modifyBtn = findViewById(R.id.modify_btn);
         modifyCompleteBtn = findViewById(R.id.modify_complete_btn);
         goBackBtn = findViewById(R.id.myPage_goBack_btn);
@@ -345,6 +349,42 @@ public class MyPageActivity extends AppCompatActivity {
                 startActivity(intent);
                 Toast.makeText(getApplicationContext(),"로그아웃 하였습니다.",Toast.LENGTH_SHORT).show();
                 finish();
+            }
+        });
+        //회원 탈퇴 버튼
+        deleteIdTextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MyPageActivity.this);
+                builder.setTitle("회원탈퇴");
+                builder.setMessage("정말 탈퇴 하시겠습니까?");
+                builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mFirebaseAuth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+                                    Toast.makeText(getApplicationContext(),"탈퇴가 완료되었습니다.",Toast.LENGTH_SHORT).show();
+                                    mDatabaseRef.child(intent.getStringExtra("qr")).removeValue();
+                                    Intent intent = new Intent(MyPageActivity.this,LoginActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    Toast.makeText(getApplicationContext(),"오류로 인해 탈퇴에 실패했습니다.",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                    }
+                });
+                builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
             }
         });
 

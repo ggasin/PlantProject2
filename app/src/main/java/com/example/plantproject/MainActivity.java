@@ -6,14 +6,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -54,9 +57,9 @@ public class MainActivity extends AppCompatActivity {
     //db이름 enum으로 저장. 나중에 변경 용이하도록
     public enum DbName {
         BUTTON("button"), OPERATION("operation"), USERACCOUNT("UserAccount"),
-        EMAILID("emailId"),NICKNAME("nickName"),NAME("name"),TEL("tel"),PWD("pwd"),
+        EMAILID("emailId"),NAME("name"),NICKNAME("nickName"),TEL("tel"),PWD("pwd"),
         QR("qr"),AUTO("auto"),NONAUTO("nonauto"),LED("LED"),WATER("water"), COOLER("cooler"),
-        SENSORS("sensors"),HUM("Hum"),TEMP("Temp"),SOILHUM("soil_hum");
+        SENSORS("sensors"),HUM("Hum"),TEMP("Temp"),SOILHUM("soil_hum"),AUTOSTANDARD("autoStandard");
         private final String label;
         DbName(String label){
             this.label = label;
@@ -152,6 +155,32 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this,HelpPopupActivity.class);
                 startActivity(intent);
 
+            }
+        });
+        goSettingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenu popup= new PopupMenu(getApplicationContext(), view);//v는 클릭된 뷰를 의미
+                getMenuInflater().inflate(R.menu.option_menu, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()){
+                            case R.id.autoValue_setting_menu:
+                                Intent intent = new Intent(MainActivity.this,SettingAutoActivity.class);
+                                intent.putExtra("qr",qr);
+                                startActivity(intent);
+                                break;
+                            case R.id.alert_setting_menu:
+                                Toast.makeText(getApplication(),"메뉴1",Toast.LENGTH_SHORT).show();
+                                break;
+                            default:
+                                break;
+                        }
+                        return false;
+                    }
+                });
+                popup.show();//Popup Menu 보이기
             }
         });
 

@@ -48,9 +48,9 @@ public class RegisterActivity extends AppCompatActivity {
     //db이름 enum으로 저장. 나중에 변경 용이하도록
     public enum DbName {
         BUTTON("button"), OPERATION("operation"), USERACCOUNT("UserAccount"),
-        EMAILID("emailId"),NAME("name"),TEL("tel"),PWD("pwd"),
+        EMAILID("emailId"),NAME("name"),NICKNAME("nickName"),TEL("tel"),PWD("pwd"),
         QR("qr"),AUTO("auto"),NONAUTO("nonauto"),LED("LED"),WATER("water"), COOLER("cooler"),
-        SENSORS("sensors"),HUM("Hum"),TEMP("Temp"),SOILHUM("soil_hum");
+        SENSORS("sensors"),HUM("Hum"),TEMP("Temp"),SOILHUM("soil_hum"),AUTOSTANDARD("autoStandard");
         private final String label;
         DbName(String label){
             this.label = label;
@@ -227,7 +227,6 @@ public class RegisterActivity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 checkEditPwd.setText("");
                 isPwdCheckOK=false;
-
             }
 
             @Override
@@ -284,11 +283,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
         //회원가입 버튼 클릭 후 가입 진행 이벤트
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -326,6 +320,11 @@ public class RegisterActivity extends AppCompatActivity {
                                 auto_nonauto_child.put(DbName.COOLER.label(), "OFF");
                                 auto_nonauto_child.put(DbName.WATER.label(), "OFF");
 
+                                HashMap<Object,String> auto_standard_child = new HashMap<>();
+                                auto_standard_child.put(DbName.SOILHUM.label(),"20");
+                                auto_standard_child.put(DbName.TEMP.label(),"30");
+
+
                                 account.setEmailId(firebaseUser.getEmail()); // 로그인을 하는 정확한 이메일이 필요하기 때문에 firebaseUser에서 정보를 가져옴
                                 account.setPwd(strPwd);
                                 account.setName(strName);
@@ -336,6 +335,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 mDatabaseRef.child(account.getQr()).child(DbName.OPERATION.label()).child(DbName.SENSORS.label()).setValue(sensors_child);
                                 mDatabaseRef.child(account.getQr()).child(DbName.OPERATION.label()).child(DbName.BUTTON.label()).child(DbName.AUTO.label()).setValue(auto_nonauto_child);
                                 mDatabaseRef.child(account.getQr()).child(DbName.OPERATION.label()).child(DbName.BUTTON.label()).child(DbName.NONAUTO.label()).setValue(auto_nonauto_child);
+                                mDatabaseRef.child(account.getQr()).child(DbName.OPERATION.label()).child(DbName.AUTOSTANDARD.label()).setValue(auto_standard_child);
                                 Toast.makeText(getApplicationContext(), "가입성공", Toast.LENGTH_SHORT).show();
 
                                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
