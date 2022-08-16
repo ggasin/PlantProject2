@@ -18,7 +18,6 @@ public class HelpPopupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_popup_help);
         helpDoneBtn = findViewById(R.id.help_done_btn);
-
         helpDoneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

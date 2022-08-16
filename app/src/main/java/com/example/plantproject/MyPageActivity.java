@@ -128,6 +128,7 @@ public class MyPageActivity extends AppCompatActivity {
                 myEditTel.setEnabled(true);
                 myEditPwd.setEnabled(true);
                 myEditCheckPwd.setEnabled(true);
+
                 modifyBtn.setVisibility(View.GONE);
                 modifyCompleteBtn.setVisibility(View.VISIBLE);
 
@@ -165,6 +166,11 @@ public class MyPageActivity extends AppCompatActivity {
                     myEditCheckPwd.setEnabled(false);
                     modifyBtn.setVisibility(View.VISIBLE);
                     modifyCompleteBtn.setVisibility(View.GONE);
+                    myCanUseNameText.setVisibility(View.GONE);
+                    myCanUseNickNameText.setVisibility(View.GONE);
+                    myCanUseTelText.setVisibility(View.GONE);
+                    myCheckPwdText.setVisibility(View.GONE);
+                    myCheckOverSixPwdText.setVisibility(View.GONE);
                     beforeModify = true;
                 }
                 else {

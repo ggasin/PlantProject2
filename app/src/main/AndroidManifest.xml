@@ -40,7 +40,8 @@
         </activity>
         <activity android:name=".FindIdActivity"></activity>
         <activity android:name=".FindPwdActivity"></activity>
-        <activity android:name=".SettingAutoActivity"></activity>
+        <activity android:name=".SettingAutoActivity"
+            android:theme="@style/DialogTheme"></activity>
     </application>
 
 </manifest>

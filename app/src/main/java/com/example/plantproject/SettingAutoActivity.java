@@ -2,6 +2,7 @@ package com.example.plantproject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,14 +38,14 @@ public class SettingAutoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_auto);
-
         doneBtn = findViewById(R.id.auto_setting_done_btn);
         cancelBtn = findViewById(R.id.auto_setting_cancel_btn);
         soilHumEdit = findViewById(R.id.auto_setting_soilHum_edit);
         tempEdit = findViewById(R.id.auto_setting_temp_edit);
-
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("plant");
         Intent intent = getIntent();
+
+        //데이터베이스에서 현재 자동기능을 사용할 때의 토양습도 기준값을 불러옴
         mDatabaseRef.child(intent.getStringExtra("qr")).child(DbName.OPERATION.label()).child(DbName.AUTOSTANDARD.label()).child(DbName.SOILHUM.label())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -57,6 +58,8 @@ public class SettingAutoActivity extends AppCompatActivity {
 
             }
         });
+
+        //데이터베이스에서 현재 자동기능을 사용할 때의 온도 기준값을 불러옴
         mDatabaseRef.child(intent.getStringExtra("qr")).child(DbName.OPERATION.label()).child(DbName.AUTOSTANDARD.label()).child(DbName.TEMP.label())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -69,6 +72,8 @@ public class SettingAutoActivity extends AppCompatActivity {
 
             }
         });
+
+        //수정 완료 버튼 이벤트
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,6 +85,8 @@ public class SettingAutoActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        //취소 버튼
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,5 +94,19 @@ public class SettingAutoActivity extends AppCompatActivity {
             }
         });
 
+    }
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        //바깥레이어 클릭시 안닫히게
+        if(event.getAction()==MotionEvent.ACTION_OUTSIDE){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        //안드로이드 백버튼 막기
+        return;
     }
 }

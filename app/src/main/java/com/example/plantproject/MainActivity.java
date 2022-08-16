@@ -141,6 +141,8 @@ public class MainActivity extends AppCompatActivity {
         nonAutoBtnListener(handWaterBtn,"handWaterBtn");
         nonAutoBtnListener(handLedBtn,"handLedBtn");
         nonAutoBtnListener(handCoolerBtn,"handCoolerBtn");
+
+        //마이페이지 버튼 클릭 이벤트
         goMyPageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -149,6 +151,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        //도움말 버튼 클릭 이벤트
         goHelpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -157,6 +161,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        //세팅(설정) 버튼 클릭 이벤트
         goSettingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -382,6 +388,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+    //수동 버튼 클릭 이벤트 리스너 함수
     public void nonAutoBtnListener(Button btn,String btnName){
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
