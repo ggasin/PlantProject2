@@ -33,19 +33,15 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    // Import the BoM for the Firebase platform
-    implementation platform('com.google.firebase:firebase-bom:30.2.0')
-    // Declare the dependency for the Firebase Authentication library
-    // When using the BoM, you don't specify versions in Firebase library dependencies
-    implementation 'com.google.firebase:firebase-auth'
-    implementation 'com.google.firebase:firebase-database:20.0.5'
-    implementation 'com.google.android.material:material:1.1.0' // material 라이브러리
+    implementation platform('com.google.firebase:firebase-bom:30.2.0')    // 사용하면 앱에서 항상 호환되는 Firebase Android 라이브러리 버전을 사용합니다.
+    implementation 'com.google.firebase:firebase-auth' //파이어베이스 auth를 사용하기 위한 라이브러리
+    implementation 'com.google.firebase:firebase-database:20.0.5'//파이어베이스 데이터베이스와 연동하기 위한 라이브러리
+    implementation 'com.google.android.material:material:1.1.0' // material디자인을 위한 라이브러리
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation 'com.github.bumptech.glide:glide:4.10.0' // gif 파일을 사용하기 위한 라이브러리
     annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0' //gif 파일을 사용하기 위한 라이브러리
-
     implementation 'com.sothree.slidinguppanel:library:3.4.0' // 슬라이드 레이아웃 라이브러리
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0' //qr코드 스캔 라이브러리
 }

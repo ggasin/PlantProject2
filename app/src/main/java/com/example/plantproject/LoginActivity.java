@@ -66,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("plant");
         Pattern pattern = Patterns.EMAIL_ADDRESS;
+
         //로그인 버튼 리스너
         loginButton.setOnClickListener(new View.OnClickListener() {
                @Override
@@ -123,6 +124,9 @@ public class LoginActivity extends AppCompatActivity {
         goRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(mFirebaseAuth.getCurrentUser()==null){
+                    Log.d("LO현재 로그인","null");
+                }
                 Intent intent = new Intent(LoginActivity.this , RegisterActivity.class);
                 startActivity(intent);
 

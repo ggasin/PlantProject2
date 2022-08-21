@@ -37,19 +37,19 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if(mFirebaseAuth.getCurrentUser() == null){
-                    Log.d("로그인","현재없음");
+                    Log.d("SP로그인","현재없음");
                     Intent intent = new Intent(SplashActivity.this,LoginActivity.class);
                     startActivity(intent);
                     finish();
                 } else {
-                    Log.d("로그인", "현재");
+                    Log.d("SP로그인", "현재");
                     Intent intent = new Intent(SplashActivity.this, RegisterActivity.class);
                     mFirebaseAuth.getCurrentUser().getIdToken(true).addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
                         @Override
                         public void onComplete(@NonNull Task<GetTokenResult> task) {
                             if (task.isSuccessful()) {
                                 String idToken = task.getResult().getToken();
-                                Log.d("현재 로그인", idToken);
+                                Log.d("SP현재 로그인", idToken);
                                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                                 mDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -61,7 +61,8 @@ public class SplashActivity extends AppCompatActivity {
                                                     if (task.isSuccessful()) {
                                                         if (task.getResult().getValue().toString().equals(mFirebaseAuth.getCurrentUser().getEmail().toString())) {
                                                             intent.putExtra("qr", sh.getKey().toString());
-                                                            Log.d("qr", intent.getStringExtra("qr"));
+                                                            Log.d("SPqr", intent.getStringExtra("qr"));
+
                                                             startActivity(intent);
                                                         } else {
                                                             Log.d("qr찾기 실패", "실패");

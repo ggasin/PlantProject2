@@ -22,6 +22,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -122,6 +125,18 @@ public class MyPageActivity extends AppCompatActivity {
         modifyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AuthCredential credential = EmailAuthProvider.getCredential(mFirebaseAuth.getCurrentUser().getEmail(),myEditPwd.getText().toString());
+                mFirebaseAuth.getCurrentUser().reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            Log.d("My로그인 재인증 성공", "로그인 재인증 완료");
+                        } else {
+                            Log.d("My로그인 재인증 실패", "로그인 재인증 실패");
+                        }
+
+                    }
+                });
                 beforeModify = false;
                 myEditName.setEnabled(true);
                 myEditNickName.setEnabled(true);
@@ -346,7 +361,7 @@ public class MyPageActivity extends AppCompatActivity {
             }
         });
 
-        //로그인 화면으로 돌아가기
+        //로그아웃 버튼
         goLogoutTextbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
