@@ -29,7 +29,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         ImageView gif_plant = (ImageView) findViewById(R.id.gif_plant);
-        Glide.with(this).load(R.drawable.plantpot_gif).into(gif_plant);
+        Glide.with(this).load(R.drawable.plantpot_gif).into(gif_plant); // gif
         mFirebaseAuth = FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("plant");
         Handler handler = new Handler();

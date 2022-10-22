@@ -2,26 +2,34 @@ package com.example.plantproject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.transition.Visibility;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -34,9 +42,11 @@ public class MainActivity extends AppCompatActivity {
     }
     String qr;
     //센서값
-    int soil_hum=0;
-    int hum=0;
-    int temp=0;
+    private int soil_hum;
+    private int hum;
+    private int temp;
+    //식물 상태
+    static boolean plantState; // true 면 상태 좋음, false 면 상태 안좋음(토양습도, 온도 중 문제 발생)
     //자동 on/off 버튼 boolean 변수
     boolean autoWaterOn = false; // false면 꺼져있는 상태
     boolean autoLedOn = false;
@@ -53,6 +63,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView waterText, ledText, coolerText, shDataText, hDataText, tDataText, plantText,nickNameText;
     private Button handWaterBtn, handLedBtn, handCoolerBtn;
     private ImageButton goMyPageBtn,goSettingBtn,goHelpBtn;
+    //gif 이미지
+    private ImageView waterPotGif, lightPotGif , windPotGif , normalPotGif, badPotGif;
+    //슬라이딩레이아웃
+    private SlidingUpPanelLayout slidingUpPanelLayout;
+
 
     //db이름 enum으로 저장. 나중에 변경 용이하도록
     public enum DbName {
@@ -73,7 +88,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //슬라이딩 레이아웃
+        slidingUpPanelLayout = findViewById(R.id.main_panel);
+        //토양습도, 온도, 습도 변수
+        soil_hum=0; hum=0; temp=0;
         //자동 ON/OFF 버튼 및 텍스트 변수
         waterToggle = findViewById(R.id.water_auto_btn);
         ledToggle = findViewById(R.id.led_auto_btn);
@@ -95,9 +113,23 @@ public class MainActivity extends AppCompatActivity {
         handWaterBtn = findViewById(R.id.hand_water_btn);
         handLedBtn = findViewById(R.id.hand_led_btn);
         handCoolerBtn = findViewById(R.id.hand_cooler_btn);
+
+        //이미지 버튼 변수 ( 마이페이지, 도움말, 설정, 그래프)
         goMyPageBtn = findViewById(R.id.mypage_btn);
         goSettingBtn = findViewById(R.id.setting_btn);
         goHelpBtn = findViewById(R.id.help_btn);
+
+        //gif 이미지
+        normalPotGif = (ImageView) findViewById(R.id.normal_pot_gif);
+        Glide.with(this).load(R.drawable.normalpot).into(normalPotGif); // gif
+        badPotGif = (ImageView) findViewById(R.id.bad_pot_gif);
+        Glide.with(this).load(R.drawable.badpot).into(badPotGif); // gif
+        waterPotGif = (ImageView) findViewById(R.id.water_pot_gif);
+        Glide.with(this).load(R.drawable.waterpot).into(waterPotGif); // gif
+        windPotGif = (ImageView) findViewById(R.id.wind_pot_gif);
+        Glide.with(this).load(R.drawable.windpot).into(windPotGif); // gif
+        lightPotGif = (ImageView) findViewById(R.id.light_pot_gif);
+        Glide.with(this).load(R.drawable.lightpot).into(lightPotGif); // gif
 
         //데이터베이스 변수
         database = FirebaseDatabase.getInstance();
@@ -117,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+
         //자동 물 조작 버튼 초기화
         setAutoEqualDatabase(DbName.WATER.label());
         setAutoEqualDatabase(DbName.LED.label());
@@ -141,6 +174,8 @@ public class MainActivity extends AppCompatActivity {
         nonAutoBtnListener(handWaterBtn,"handWaterBtn");
         nonAutoBtnListener(handLedBtn,"handLedBtn");
         nonAutoBtnListener(handCoolerBtn,"handCoolerBtn");
+
+
 
         //마이페이지 버튼 클릭 이벤트
         goMyPageBtn.setOnClickListener(new View.OnClickListener() {
@@ -177,9 +212,6 @@ public class MainActivity extends AppCompatActivity {
                                 intent.putExtra("qr",qr);
                                 startActivity(intent);
                                 break;
-                            case R.id.alert_setting_menu:
-                                Toast.makeText(getApplication(),"메뉴1",Toast.LENGTH_SHORT).show();
-                                break;
                             default:
                                 break;
                         }
@@ -191,19 +223,67 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-    }
 
+
+    }
+    // 수동 조작시 화분 상태 gif 변경 함수
+    public void setGif(ImageView gif){ // 1 물 , 2 빛 , 3 바람
+        if(plantState = true){
+            normalPotGif.setVisibility(View.GONE);
+            gif.setVisibility(View.VISIBLE);
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    gif.setVisibility(View.GONE);
+                    normalPotGif.setVisibility(View.VISIBLE);
+                }
+            },4500);
+        } else {
+            badPotGif.setVisibility(View.GONE);
+            gif.setVisibility(View.VISIBLE);
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    gif.setVisibility(View.GONE);
+                    badPotGif.setVisibility(View.VISIBLE);
+                }
+            },4500);
+        }
+
+    }
+    //나쁜 화분 상태 gif
+    public void setBadPotGif(){
+        normalPotGif.setVisibility(View.GONE);
+        badPotGif.setVisibility(View.VISIBLE);
+    }
+    //평소 화분 상태 gif
+    public void setNormalPotGif(){
+        badPotGif.setVisibility(View.GONE);
+        normalPotGif.setVisibility(View.VISIBLE);
+    }
     //센서값에 따라 말풍선 말 바꾸는 함수
     public void setSpeechBubble(TextView x){
         if(soil_hum>=40 && soil_hum<60){
             if(temp>=20 && temp <25){
                 x.setText("지금은 기분이 좋아요!");
+                plantState = true;
+                setNormalPotGif();
+                Log.d("토양 77",String.valueOf(plantState));
             } else if(temp <20){
                 x.setText("추워요..");
+                plantState = false;
+                setBadPotGif();
             } else if(temp >=25){
                 x.setText("더워요..");
+                plantState = false;
+                setBadPotGif();
             }
         } else if(soil_hum<40){
+            plantState = false;
+            setBadPotGif();
+            Log.d("셋스피치버블 안 상태",String.valueOf(plantState));
             if(temp>=20 && temp <25){
                 x.setText("목이 말라요!");
             } else if(temp <20){
@@ -212,6 +292,8 @@ public class MainActivity extends AppCompatActivity {
                 x.setText("목이 마르고 더워요..");
             }
         } else if(soil_hum>=60){
+            plantState = false;
+            setBadPotGif();
             if(temp>=20 && temp <25){
                 x.setText("축축해요!");
             } else if(temp <20){
@@ -268,11 +350,13 @@ public class MainActivity extends AppCompatActivity {
                 if(child==DbName.WATER.label()){
                     if(data.equals("ON")){
                         waterToggle.setEnabled(false);
+                        handWaterOn = true;
                         handWaterBtn.setText("물 끄기");
                         handWaterBtn.setTextColor(Color.WHITE);
                         handWaterBtn.setBackground(getResources().getDrawable(R.drawable.hand_on));
                     } else {
                         waterToggle.setEnabled(true);
+                        handWaterOn = false;
                         handWaterBtn.setText("물 주기");
                         handWaterBtn.setTextColor(Color.BLACK);
                         handWaterBtn.setBackground(getResources().getDrawable(R.drawable.btn_hand));
@@ -280,11 +364,13 @@ public class MainActivity extends AppCompatActivity {
                 }else if(child==DbName.COOLER.label()){
                     if(data.equals("ON")){
                         coolerToggle.setEnabled(false);
+                        handCoolerOn = true;
                         handCoolerBtn.setText("공기 순환 종료");
                         handCoolerBtn.setTextColor(Color.WHITE);
                         handCoolerBtn.setBackground(getResources().getDrawable(R.drawable.hand_on));
                     } else {
                         coolerToggle.setEnabled(true);
+                        handCoolerOn = false;
                         handCoolerBtn.setText("공기 순환 실행");
                         handCoolerBtn.setTextColor(Color.BLACK);
                         handCoolerBtn.setBackground(getResources().getDrawable(R.drawable.btn_hand));
@@ -292,11 +378,13 @@ public class MainActivity extends AppCompatActivity {
                 }else if(child==DbName.LED.label()){
                     if(data.equals("ON")){
                         ledToggle.setEnabled(false);
+                        handLedOn = true;
                         handLedBtn.setText("조명 끄기");
                         handLedBtn.setTextColor(Color.WHITE);
                         handLedBtn.setBackground(getResources().getDrawable(R.drawable.hand_on));
                     } else {
                         ledToggle.setEnabled(true);
+                        handLedOn = false;
                         handLedBtn.setText("조명 켜기");
                         handLedBtn.setTextColor(Color.BLACK);
                         handLedBtn.setBackground(getResources().getDrawable(R.drawable.btn_hand));
@@ -318,6 +406,8 @@ public class MainActivity extends AppCompatActivity {
                 if(child==DbName.SOILHUM.label()){ //토양습도면
                     shDataText.setText(data+"%"); //토양습도 텍스트뷰에 데이터 표시
                     soil_hum = data;
+                    Log.d("토양습도11",String.valueOf(soil_hum));
+                    Log.d("온도11",String.valueOf(temp));
                     setSpeechBubble(plantText); //변경된 토양습도에 따른 말풍선 변경
                 }else if(child == DbName.HUM.label()){
                     hDataText.setText(data+"%");
@@ -326,6 +416,8 @@ public class MainActivity extends AppCompatActivity {
                 }else if(child == DbName.TEMP.label()){
                     tDataText.setText(data +"º");
                     temp=data;
+                    Log.d("토양습도22",String.valueOf(soil_hum));
+                    Log.d("온도22",String.valueOf(temp));
                     setSpeechBubble(plantText);
                 }
             }
@@ -403,21 +495,24 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(),"물주기를 실행합니다.", Toast.LENGTH_LONG).show();
                             handWaterOn =true;
                             waterToggle.setEnabled(false);
+                            setGif(waterPotGif);
                             mDatabaseRef.child(DbName.OPERATION.label()).child(DbName.BUTTON.label()).child(DbName.NONAUTO.label()).child(DbName.WATER.label()).setValue("ON");
                             handWaterBtn.setText("물 끄기");
                             handWaterBtn.setTextColor(Color.WHITE);
                             handWaterBtn.setBackground(getResources().getDrawable(R.drawable.hand_on));
+                            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED); //슬라이드 내리기
                         }
                     }
                     //만약 물이 나오고 있으면
                     else {
-                        Toast.makeText(getApplicationContext(),"물주기를 종료합니다.", Toast.LENGTH_LONG).show();
-                        handWaterOn =false;
+                        Toast.makeText(getApplicationContext(), "물주기를 종료합니다.", Toast.LENGTH_LONG).show();
+                        handWaterOn = false;
                         waterToggle.setEnabled(true);
                         mDatabaseRef.child(DbName.OPERATION.label()).child(DbName.BUTTON.label()).child(DbName.NONAUTO.label()).child(DbName.WATER.label()).setValue("OFF");
                         handWaterBtn.setText("물 주기");
                         handWaterBtn.setTextColor(Color.BLACK);
                         handWaterBtn.setBackground(getResources().getDrawable(R.drawable.btn_hand));
+
                     }
                 }else if(btnName=="handLedBtn"){
                     //만약 불이 꺼져있는 상태라면
@@ -429,10 +524,12 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(),"조명을 켰습니다.", Toast.LENGTH_LONG).show();
                             handLedOn =true;
                             ledToggle.setEnabled(false);
+                            setGif(lightPotGif);
                             mDatabaseRef.child(DbName.OPERATION.label()).child(DbName.BUTTON.label()).child(DbName.NONAUTO.label()).child(DbName.LED.label()).setValue("ON");
                             handLedBtn.setText("조명 끄기");
                             handLedBtn.setTextColor(Color.WHITE);
                             handLedBtn.setBackground(getResources().getDrawable(R.drawable.hand_on));
+                            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED); //슬라이드 내리기
                         }
                     }
                     //만약 불이 켜져있는 상태라면
@@ -455,10 +552,12 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(),"공기순환을 실행합니다.", Toast.LENGTH_LONG).show();
                             handCoolerOn =true;
                             coolerToggle.setEnabled(false);
+                            setGif(windPotGif);
                             mDatabaseRef.child(DbName.OPERATION.label()).child(DbName.BUTTON.label()).child(DbName.NONAUTO.label()).child(DbName.COOLER.label()).setValue("ON");
                             handCoolerBtn.setText("공기 순환 종료");
                             handCoolerBtn.setTextColor(Color.WHITE);
                             handCoolerBtn.setBackground(getResources().getDrawable(R.drawable.hand_on));
+                            slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED); //슬라이드 내리기
                         }
                     }
                     //만약 공기순환이 켜져있는 상태라면

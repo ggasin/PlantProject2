@@ -140,22 +140,11 @@
             android:layout_height="280dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.19"
+            app:layout_constraintVertical_bias="0.185"
             app:srcCompat="@drawable/circle" />
-
-        <ImageView
-            android:id="@+id/plantpot"
-            android:layout_width="200dp"
-            android:layout_height="250dp"
-            app:layout_constraintBottom_toBottomOf="@+id/circle_profile_icon"
-            app:layout_constraintEnd_toEndOf="@+id/circle_profile_icon"
-            app:layout_constraintHorizontal_bias="0.496"
-            app:layout_constraintStart_toStartOf="@+id/circle_profile_icon"
-            app:layout_constraintTop_toTopOf="@+id/circle_profile_icon"
-            app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/plantpot" />
 
         <ImageView
             android:id="@+id/name_tag_icon"
@@ -178,6 +167,62 @@
             app:layout_constraintEnd_toEndOf="@+id/name_tag_icon"
             app:layout_constraintStart_toStartOf="@+id/name_tag_icon"
             app:layout_constraintTop_toTopOf="@+id/name_tag_icon" />
+
+        <ImageView
+            android:id="@+id/normal_pot_gif"
+            android:layout_width="150dp"
+            android:layout_height="200dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/circle_profile_icon"
+            app:layout_constraintEnd_toEndOf="@+id/circle_profile_icon"
+            app:layout_constraintHorizontal_bias="0.57"
+            app:layout_constraintStart_toStartOf="@+id/circle_profile_icon"
+            app:layout_constraintTop_toTopOf="@+id/circle_profile_icon"
+            app:srcCompat="@drawable/normalpot" />
+
+        <ImageView
+            android:id="@+id/bad_pot_gif"
+            android:layout_width="150dp"
+            android:layout_height="200dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/circle_profile_icon"
+            app:layout_constraintEnd_toEndOf="@+id/circle_profile_icon"
+            app:layout_constraintStart_toStartOf="@+id/circle_profile_icon"
+            app:layout_constraintTop_toTopOf="@+id/circle_profile_icon"
+            app:srcCompat="@drawable/badpot" />
+
+        <ImageView
+            android:id="@+id/water_pot_gif"
+            android:layout_width="150dp"
+            android:layout_height="200dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/circle_profile_icon"
+            app:layout_constraintEnd_toEndOf="@+id/circle_profile_icon"
+            app:layout_constraintStart_toStartOf="@+id/circle_profile_icon"
+            app:layout_constraintTop_toTopOf="@+id/circle_profile_icon"
+            app:srcCompat="@drawable/waterpot" />
+
+        <ImageView
+            android:id="@+id/wind_pot_gif"
+            android:layout_width="150dp"
+            android:layout_height="200dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/circle_profile_icon"
+            app:layout_constraintEnd_toEndOf="@+id/circle_profile_icon"
+            app:layout_constraintStart_toStartOf="@+id/circle_profile_icon"
+            app:layout_constraintTop_toTopOf="@+id/circle_profile_icon"
+            app:srcCompat="@drawable/windpot" />
+
+        <ImageView
+            android:id="@+id/light_pot_gif"
+            android:layout_width="150dp"
+            android:layout_height="200dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/circle_profile_icon"
+            app:layout_constraintEnd_toEndOf="@+id/circle_profile_icon"
+            app:layout_constraintStart_toStartOf="@+id/circle_profile_icon"
+            app:layout_constraintTop_toTopOf="@+id/circle_profile_icon"
+            app:srcCompat="@drawable/lightpot" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

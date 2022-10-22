@@ -3,7 +3,6 @@
     <item android:id="@+id/autoValue_setting_menu"
           android:title="자동 센서값 설정"
         />
-    <item android:id="@+id/alert_setting_menu"
-          android:title="알림 설정"/>
+
 
 </menu>

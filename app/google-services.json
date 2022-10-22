@@ -1,34 +1,33 @@
 {
   "project_info": {
-    "project_number": "925800132792",
-    "firebase_url": "https://precticeplant-default-rtdb.firebaseio.com",
-    "project_id": "precticeplant",
-    "storage_bucket": "precticeplant.appspot.com"
+    "project_number": "442510645576",
+    "project_id": "plantproject-dbc8e",
+    "storage_bucket": "plantproject-dbc8e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:925800132792:android:06b98be0675a33e9f8c44d",
+        "mobilesdk_app_id": "1:442510645576:android:a4e292c8ded0c355a17b7d",
         "android_client_info": {
           "package_name": "com.example.plantproject"
         }
       },
       "oauth_client": [
         {
-          "client_id": "925800132792-i3rd4o4d66a4fc1vs6pd6q9vb8oj9p7m.apps.googleusercontent.com",
+          "client_id": "442510645576-mu80tacus85hakkmqq597qsdt8dt3op0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAkLRHDWj9ID5_7M-T0lD3aKeKP7Cj7dLE"
+          "current_key": "AIzaSyBuKgR7T1xlkXfWnQCTVzpw3qMBgha5ACk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "925800132792-i3rd4o4d66a4fc1vs6pd6q9vb8oj9p7m.apps.googleusercontent.com",
+              "client_id": "442510645576-mu80tacus85hakkmqq597qsdt8dt3op0.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

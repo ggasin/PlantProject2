@@ -37,6 +37,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth' //파이어베이스 auth를 사용하기 위한 라이브러리
     implementation 'com.google.firebase:firebase-database:20.0.5'//파이어베이스 데이터베이스와 연동하기 위한 라이브러리
     implementation 'com.google.android.material:material:1.1.0' // material디자인을 위한 라이브러리
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0' // MPAndroidChart 그래프 라이브러리
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
